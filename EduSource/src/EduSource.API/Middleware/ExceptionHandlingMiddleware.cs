@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using EduSource.Domain.Exceptions;
 
-namespace Neighbor.API.Middleware;
+namespace EduSource.API.Middleware;
 public class ExceptionHandlingMiddleware : IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;

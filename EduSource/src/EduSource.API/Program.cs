@@ -5,7 +5,7 @@ using EduSource.Infrastructure.Services;
 using EduSource.Persistence.DependencyInjection.Extensions;
 using EduSource.Persistence;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Neighbor.API.Middleware;
+using EduSource.API.Middleware;
 using Neighbor.Infrastructure.Dapper.DependencyInjection.Extensions;
 using Neighbor.Persistence.SeedData;
 using EduSource.Persistance.DependencyInjection.Options;

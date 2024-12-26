@@ -9,6 +9,37 @@ public class Account : DomainEntity<Guid>
     {
     }
 
+    public Account
+        (string firstName,
+        string lastName,
+        string email,
+        string phoneNumber,
+        bool status,
+        string password,
+        GenderType gender,
+        string cropAvatarUrl,
+        string cropAvatarId,
+        string fullAvatarUrl,
+        string fullAvatarId,
+        LoginType loginType,
+        RoleType roleId
+        )
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Password = password;
+        GenderType = gender;
+        CropAvatarUrl = cropAvatarUrl;
+        CropAvatarId = cropAvatarId;
+        FullAvatarUrl = fullAvatarUrl;
+        FullAvatarId = fullAvatarId;
+        LoginType = loginType;
+        RoleId = roleId;
+        IsDeleted = false;
+    }
+
     public Account(string firstName,
         string lastName,
         string email,
@@ -44,7 +75,7 @@ public class Account : DomainEntity<Guid>
         Biography = biography;
         LoginType = loginType;
         GenderType = genderType;
-        RoleUserId = roleUserId;
+        RoleId = roleUserId;
         IsDeleted = isDeleted;
     }
 
@@ -64,6 +95,13 @@ public class Account : DomainEntity<Guid>
     public string? Biography { get; private set; }
     public LoginType LoginType { get; private set; }
     public GenderType GenderType { get; private set; }
-    public RoleType RoleUserId { get; private set; }
+    public RoleType RoleId { get; private set; }
     public virtual Role Role { get; private set; }
+
+    public static Account CreateMemberAccountLocal
+        (string firstName, string lastName, string email, string phoneNumber, string password, GenderType gender)
+    {
+        string avatarUrl = "https://res.cloudinary.com/dilv5n8yb/image/upload/v1730774633/pawfund/yreeouhlcp33op9pesbz.png";
+        return new Account(firstName, lastName, email, phoneNumber, false, password, gender, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Member);
+    }
 }

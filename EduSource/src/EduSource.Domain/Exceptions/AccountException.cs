@@ -10,5 +10,7 @@ public static class AccountException
             : base(MessagesList.AccountNotFoundException.GetMessage().Message,
                    MessagesList.AccountNotFoundException.GetMessage().Code)
         { }
+
+
     }
 }

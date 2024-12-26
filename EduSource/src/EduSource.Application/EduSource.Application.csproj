@@ -14,8 +14,6 @@
 
   <ItemGroup>
     <Folder Include="Mapper\" />
-    <Folder Include="UseCases\V1\Commands\Authentications\" />
-    <Folder Include="UseCases\V1\Events\" />
     <Folder Include="UseCases\V1\Queries\Authentications\" />
   </ItemGroup>
 

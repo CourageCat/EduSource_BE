@@ -11,6 +11,12 @@ public enum MessagesList
     [Message("Registration successful, please check email for confirmation", "auth_register_success")]
     AuthRegisterSuccess,
 
+    [Message("Registration time has passed, please register again", "auth_noti_01")]
+    AuthRegisterTimeOutException,
+
+    [Message("Account confirmation successful", "auth_noti_04")]
+    VerifyEmailSuccess,
+
     [Message("Registration successful, you can now login", "auth_verify_success")]
     AuthVerifyEmailRegister,
 

@@ -1,6 +1,6 @@
 ﻿using EduSource.Domain.Exceptions;
 
-namespace Neighbor.Application.Exceptions;
+namespace EduSource.Application.Exceptions;
 public sealed class ValidationException : DomainException
 {
     public ValidationException(IReadOnlyCollection<ValidationError> errors)
