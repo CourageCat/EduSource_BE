@@ -108,4 +108,15 @@ public class Account : DomainEntity<Guid>
         }
         return new Account(firstName, lastName, email, phoneNumber, false, password, gender, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Member);
     }
+
+    public static Account CreateMemberAccountGoogle
+        (string firstName, string lastName, string email, GenderType gender)
+    {
+        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1735300380/edusource/male-avatar.png";
+        if (gender == GenderType.Female)
+        {
+            avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1735300380/edusource/female-avatar.png";
+        }
+        return new Account(firstName, lastName, email, "", false, "", gender, avatarUrl, "", avatarUrl, "", LoginType.Google, RoleType.Member);
+    }
 }

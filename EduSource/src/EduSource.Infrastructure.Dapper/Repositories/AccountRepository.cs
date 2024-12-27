@@ -64,7 +64,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account> GetByEmailAsync(string email)
     {
-        var sql = "SELECT Id, FirstName, LastName, Email, PhoneNumber, Password, RoleUserId, LoginType, CropAvatarUrl, FullAvatarUrl, IsDeleted FROM Accounts WHERE Email = @Email";
+        var sql = "SELECT Id, FirstName, LastName, Email, PhoneNumber, Password, RoleId, LoginType, CropAvatarUrl, FullAvatarUrl, IsDeleted FROM Accounts WHERE Email = @Email";
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             await connection.OpenAsync();
@@ -94,7 +94,7 @@ public class AccountRepository : IAccountRepository
       ,[FullCoverPhotoUrl]
       ,[LoginType]
       ,[GenderType]
-      ,[RoleUserId]
+      ,[RoleId]
       ,[CreatedDate]
       ,[ModifiedDate]
       ,[IsDeleted]

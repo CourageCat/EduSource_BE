@@ -5,6 +5,9 @@ public enum MessagesList
     [Message("This email has been registered", "auth_email_exists")]
     AuthEmailExistException,
 
+    [Message("This email has not been registered, please try again", "auth_email_02")]
+    AuthEmailNotFoundException,
+
     [Message("Registration failed, please register again", "auth_register_failure")]
     AuthRegisterFailure,
 
