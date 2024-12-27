@@ -101,7 +101,11 @@ public class Account : DomainEntity<Guid>
     public static Account CreateMemberAccountLocal
         (string firstName, string lastName, string email, string phoneNumber, string password, GenderType gender)
     {
-        string avatarUrl = "https://res.cloudinary.com/dilv5n8yb/image/upload/v1730774633/pawfund/yreeouhlcp33op9pesbz.png";
+        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1735300380/edusource/male-avatar.png";
+        if (gender == GenderType.Female)
+        {
+            avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1735300380/edusource/female-avatar.png";
+        }
         return new Account(firstName, lastName, email, phoneNumber, false, password, gender, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Member);
     }
 }
