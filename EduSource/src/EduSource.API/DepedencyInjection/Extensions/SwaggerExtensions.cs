@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Microsoft.OpenApi.Models;
-using Neighbor.API.DepedencyInjection.Options;
+using EduSource.API.DepedencyInjection.Options;
 
 namespace EduSource.API.DepedencyInjection.Extensions;
 public static class SwaggerExtensions

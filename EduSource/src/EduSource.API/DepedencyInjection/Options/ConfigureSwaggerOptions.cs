@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Neighbor.API.DepedencyInjection.Options;
+namespace EduSource.API.DepedencyInjection.Options;
 public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 {
     private readonly IApiVersionDescriptionProvider _provider;
