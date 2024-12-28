@@ -21,16 +21,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\EmailTemplates\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EduSource.Application\EduSource.Application.csproj" />
     <ProjectReference Include="..\EduSource.Contract\EduSource.Contract.csproj" />
     <ProjectReference Include="..\EduSource.Infrastructure.Dapper\EduSource.Infrastructure.Dapper.csproj" />
     <ProjectReference Include="..\EduSource.Infrastructure\EduSource.Infrastructure.csproj" />
     <ProjectReference Include="..\EduSource.Persistance\EduSource.Persistance.csproj" />
     <ProjectReference Include="..\EduSource.Presentation\EduSource.Presentation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\EmailTemplates\EmailVerifyEmail.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -119,4 +119,9 @@ public class Account : DomainEntity<Guid>
         }
         return new Account(firstName, lastName, email, "", false, "", gender, avatarUrl, "", avatarUrl, "", LoginType.Google, RoleType.Member);
     }
+
+    public void UpdatePassword(string newPassword)
+    {
+        Password = newPassword;
+    }
 }

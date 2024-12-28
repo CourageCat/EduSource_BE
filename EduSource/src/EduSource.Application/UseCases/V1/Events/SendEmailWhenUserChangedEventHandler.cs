@@ -40,9 +40,8 @@ public sealed class SendEmailWhenUserChangedEventHandler
         await _emailService.SendMailAsync
            (notification.Email,
            "VerifyEmail EduSource",
-           "EmailRegister.html", new Dictionary<string, string> {
+           "EmailVerifyEmail.html", new Dictionary<string, string> {
             { "ToEmail", notification.Email},
-            {"Link", $"https://www.facebook.com"}
        });
     }
 
@@ -72,7 +71,7 @@ public sealed class SendEmailWhenUserChangedEventHandler
         await _emailService.SendMailAsync
             (notification.Email,
             "Register with Google",
-            "EmailRegister.html", new Dictionary<string, string> {
+            "EmailRegisterWithGoogle.html", new Dictionary<string, string> {
             {"ToEmail", notification.Email},
         });
     }

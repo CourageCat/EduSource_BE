@@ -53,7 +53,7 @@ public enum MessagesList
     [Message("Please check your email to enter otp", "auth_noti_05")]
     AuthForgotPasswordEmailSuccess,
 
-    [Message("Please fill new password to change", "auth_noti_06")]
+    [Message("Verify OTP successfully", "auth_noti_06")]
     AuthForgotPasswordOtpSuccess,
 
     [Message("Your account password has been changed successfully.", "auth_noti_07")]
