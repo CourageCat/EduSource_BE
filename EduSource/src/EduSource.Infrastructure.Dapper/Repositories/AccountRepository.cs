@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
-using EduSource.Domain.Abstraction.Dappers.Repositories;
 
 namespace EduSource.Infrastructure.Dapper.Repositories;
 public class AccountRepository : IAccountRepository

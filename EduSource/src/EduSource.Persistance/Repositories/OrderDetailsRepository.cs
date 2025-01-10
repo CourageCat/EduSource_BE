@@ -6,12 +6,7 @@ using EduSource.Persistence.Repositories;
 
 namespace EduSource.Persistance.Repositories;
 
-public class AccountRepository(ApplicationDbContext context) : RepositoryBase<Account, Guid>(context), IAccountRepository
+public class OrderDetailsRepository(ApplicationDbContext context) : RepositoryBase<OrderDetails, Guid>(context), IOrderDetailsRepository
 {
     private readonly ApplicationDbContext _context = context;
-
-    public async Task<Account> GetAccountByEmailAsync(string email)
-    {
-        return await _context.Accounts.FirstOrDefaultAsync(account => account.Email == email);
-    }
 }

@@ -6,6 +6,7 @@ using EduSource.Domain.Abstraction.EntitiyFramework;
 using EduSource.Domain.Abstraction.EntitiyFramework.Repositories;
 using EduSource.Persistence.Repositories;
 using EduSource.Persistance.DependencyInjection.Options;
+using EduSource.Persistance.Repositories;
 
 namespace EduSource.Persistence.DependencyInjection.Extensions;
 
@@ -43,6 +44,15 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped(typeof(IEFUnitOfWork), typeof(EFUnitOfWork))
             .AddTransient(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>))
-            .AddTransient<IAccountRepository, AccountRepository>();
+            .AddTransient<IAccountRepository, AccountRepository>()
+            .AddTransient<ICartRepository, CartRepository>()
+            .AddTransient<IComboRepository, ComboRepository>()
+            .AddTransient<IFeedbackRepository, FeedbackRepository>()
+            .AddTransient<IImageOfProductRepository, ImageOfProductRepository>()
+            .AddTransient<IOrderDetailsRepository, OrderDetailsRepository>()
+            .AddTransient<IOrderRepository, OrderRepository>()
+            .AddTransient<IProductInComboRepository, ProductInComboRepository>()
+            .AddTransient<IProductRepository, ProductRepository>()
+            .AddTransient<IWishlistRepository, WishlistRepository>();
     }
 }

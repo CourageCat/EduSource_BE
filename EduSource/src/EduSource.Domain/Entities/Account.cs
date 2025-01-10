@@ -97,6 +97,14 @@ public class Account : DomainEntity<Guid>
     public GenderType GenderType { get; private set; }
     public RoleType RoleId { get; private set; }
     public virtual Role Role { get; private set; }
+    public virtual Seller Seller { get; private set; }
+    public virtual ICollection<Feedback> Feedbacks { get; private set; }
+    public virtual ICollection<Order> Orders { get; private set; }
+    public virtual ICollection<Combo> Combos { get; private set; }
+    public virtual ICollection<Wishlist> Wishlists { get; private set; }
+    public virtual ICollection<Product> Products { get; private set; }
+
+
 
     public static Account CreateMemberAccountLocal
         (string firstName, string lastName, string email, string phoneNumber, string password, GenderType gender)

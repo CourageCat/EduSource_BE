@@ -10,6 +10,16 @@ public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructureDapper(this IServiceCollection services)
         => services.AddTransient<IDPUnitOfWork, DPUnitOfWork>()
-                   .AddTransient<IAccountRepository, AccountRepository>();
+                   .AddTransient<IAccountRepository, AccountRepository>()
+        .AddTransient<IBookRepositry, BookRepository>()
+        .AddTransient<ICartRepository, CartRepository>()
+        .AddTransient<IComboRepository, ComboRepository>()
+        .AddTransient<IFeedbackRepository, FeedbackRepository>()
+        .AddTransient<IImageOfProductRepository, ImageOfProductRepository>()
+        .AddTransient<IOrderDetailsRepository, OrderDetailsRepository>()
+        .AddTransient<IOrderRepository, OrderRepository>()
+        .AddTransient<IProductInComboRepository, ProductInComboRepository>()
+        .AddTransient<IProductRepository, ProductRepository>()
+        .AddTransient<IWishlistRepository, WishlistRepository>();
 
 }

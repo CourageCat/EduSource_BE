@@ -19,4 +19,21 @@ public class EFUnitOfWork : IEFUnitOfWork
     => await _context.SaveChangesAsync();
 
     public IAccountRepository AccountRepository { get; }
+
+    public IComboRepository ComboRepository { get; }
+
+    public IFeedbackRepository FeedbackRepository { get; }
+
+    public IImageOfProductRepository ImageOfProductRepository { get; }
+
+    public IOrderDetailsRepository OrderDetailsRepository { get; }
+
+    public IOrderRepository OrderRepository { get; }
+
+    public IProductInComboRepository ProductInComboRepository { get; }
+
+    public IProductRepository ProductRepository { get; }
+
+    public IWishlistRepository WishlistRepository { get; }
+    public ICartRepository CartRepository { get; }
 }
