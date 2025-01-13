@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using EduSource.Application.Behaviors;
+using EduSource.Application.Mapper;
 
 namespace EduSource.Application.DependencyInjection.Extensions;
 public static class ServiceCollectionExtensions
@@ -17,7 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddAutoMapper(
                 cfg =>
                 {
-                    
+                    cfg.AddProfile<BookProfile>();
                 }
         );
         return services;

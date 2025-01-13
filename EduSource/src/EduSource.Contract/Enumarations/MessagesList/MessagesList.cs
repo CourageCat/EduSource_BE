@@ -64,4 +64,10 @@ public enum MessagesList
 
     [Message("Can not find this account!", "account_noti_exception_01")]
     AccountNotFoundException,
+
+    [Message("Can not find any books!", "book_noti_exception_01")]
+    BookNotFoundException,
+
+    [Message("All Books: ", "book_noti_success_01")]
+    BookGetAllBooksSuccess,
 }

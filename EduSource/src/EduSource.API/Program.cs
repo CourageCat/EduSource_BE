@@ -6,8 +6,8 @@ using EduSource.Persistence.DependencyInjection.Extensions;
 using EduSource.Persistence;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using EduSource.API.Middleware;
-using Neighbor.Infrastructure.Dapper.DependencyInjection.Extensions;
-using Neighbor.Persistence.SeedData;
+using EduSource.Infrastructure.Dapper.DependencyInjection.Extensions;
+using EduSource.Persistence.SeedData;
 using EduSource.Persistance.DependencyInjection.Options;
 
 var builder = WebApplication.CreateBuilder(args);

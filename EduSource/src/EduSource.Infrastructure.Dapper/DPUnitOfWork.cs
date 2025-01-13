@@ -1,13 +1,22 @@
 ﻿using EduSource.Domain.Abstraction.Dappers;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
-using EduSource.Domain.Abstraction.Dappers.Repositories;
 
 namespace EduSource.Infrastructure.Dapper;
 public class DPUnitOfWork : IDPUnitOfWork
 {
-    public DPUnitOfWork(IAccountRepository accountRepository)
+    public DPUnitOfWork(IAccountRepository accountRepository, IComboRepository comboRepository, IFeedbackRepository feedbackRepository, IImageOfProductRepository imageOfProductRepository, IOrderDetailsRepository orderDetailsRepository, IOrderRepository orderRepository, IProductInComboRepository productInComboRepository, IProductRepository productRepository, IWishlistRepository wishlistRepository, ICartRepository cartRepository, IBookRepository bookRepository)
     {
         AccountRepositories = accountRepository;
+        ComboRepositories = comboRepository;
+        FeedbackRepositories = feedbackRepository;
+        ImageOfProductRepositories = imageOfProductRepository;
+        OrderDetailsRepositories = orderDetailsRepository;
+        OrderRepositories = orderRepository;
+        ProductInComboRepositories = productInComboRepository;
+        ProductRepositories = productRepository;
+        WishlistRepositories = wishlistRepository;
+        CartRepositories = cartRepository;
+        BookRepositories = bookRepository;
     }
     public IAccountRepository AccountRepositories { get; }
 
@@ -29,5 +38,5 @@ public class DPUnitOfWork : IDPUnitOfWork
 
     public ICartRepository CartRepositories { get; }
 
-    public IBookRepositry BookRepositries { get; }
+    public IBookRepository BookRepositories {  get; }
 }

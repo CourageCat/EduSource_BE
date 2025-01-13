@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using EduSource.Contract.Enumarations.MessagesList;
 
-namespace EduSource.Presentation.Controller.V2;
+namespace EduSource.Presentation.Controller.V1;
 
 [ApiVersion(1)]
 public class AuthenticationController : ApiController

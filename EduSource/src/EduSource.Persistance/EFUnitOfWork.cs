@@ -6,10 +6,19 @@ public class EFUnitOfWork : IEFUnitOfWork
 {
     private readonly ApplicationDbContext _context;
 
-    public EFUnitOfWork(ApplicationDbContext context, IAccountRepository accountRepository)
+    public EFUnitOfWork(ApplicationDbContext context, IAccountRepository accountRepository, IComboRepository comboRepository, IFeedbackRepository feedbackRepository, IImageOfProductRepository imageOfProductRepository, IOrderDetailsRepository orderDetailsRepository, IOrderRepository orderRepository, IProductInComboRepository productInComboRepository, IProductRepository productRepository, IWishlistRepository wishlistRepository, ICartRepository cartRepository)
     {
         _context = context;
         AccountRepository = accountRepository;
+        ComboRepository = comboRepository;
+        FeedbackRepository = feedbackRepository;
+        ImageOfProductRepository = imageOfProductRepository;
+        OrderDetailsRepository = orderDetailsRepository;
+        OrderRepository = orderRepository;
+        ProductInComboRepository = productInComboRepository;
+        ProductRepository = productRepository;
+        WishlistRepository = wishlistRepository;
+        CartRepository = cartRepository;
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync()

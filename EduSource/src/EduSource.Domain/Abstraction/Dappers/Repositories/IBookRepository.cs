@@ -1,8 +1,12 @@
-﻿using EduSource.Domain.Abstraction.Dappers.Repositories;
+﻿using EduSource.Contract.Abstractions.Shared;
+using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
+using static Neighbor.Contract.Services.Products.Filter;
 
 namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 
-public interface IBookRepositry : IGenericRepository<Book>
+public interface IBookRepository : IGenericRepository<Book>
 {
+    Task<PagedResult<Book>> GetPagedAsync(int pageIndex, int pageSize, BookFilter filterParams, string[] selectedColumns);
+
 }

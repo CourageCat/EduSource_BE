@@ -14,5 +14,5 @@ public interface IDPUnitOfWork
     IProductRepository ProductRepositories { get; }
     IWishlistRepository WishlistRepositories { get; }
     ICartRepository CartRepositories { get; }
-    IBookRepositry BookRepositries { get; }
+    IBookRepository BookRepositories { get; }
 }
