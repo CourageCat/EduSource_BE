@@ -70,4 +70,31 @@ public enum MessagesList
 
     [Message("All Books: ", "book_noti_success_01")]
     BookGetAllBooksSuccess,
+
+    [Message("Update information profile successfully", "account_noti_05")]
+    AccountUpdateInformationSuccess,
+
+    [Message("Please check email to change", "account_noti_06")]
+    AccountUpdateChangeEmail,
+
+    [Message("Email must be different from previous email", "account_email_01")]
+    AccountEmailDuplicate,
+
+    [Message("Updated email successfully", "account_noti_07")]
+    AccountUpdateEmailSuccess,
+
+    [Message("Account must login by system to change", "account_noti_08")]
+    AccountNotLoginUpdate,
+
+    [Message("This email is valid, please wait for another email", "account_email_02")]
+    AccountEmailUpdateExit,
+
+    [Message("Please check mail to change password", "account_noti_09")]
+    AccountChangePasswordSuccess,
+
+    [Message("Change password successfully", "account_noti_10")]
+    ChangePasswordSuccess,
+
+    [Message("Avatar upload successful", "account_noti_03")]
+    AccountUploadAvatarSuccess,
 }

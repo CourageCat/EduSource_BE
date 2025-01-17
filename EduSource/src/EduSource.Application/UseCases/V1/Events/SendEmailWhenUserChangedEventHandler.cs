@@ -4,15 +4,16 @@ using EduSource.Contract.Services.Authentications;
 using EduSource.Contract.Settings;
 using Microsoft.Extensions.Options;
 
-namespace PawFund.Application.UseCases.V1.Events;
+namespace EduSource.Application.UseCases.V1.Events;
 
 public sealed class SendEmailWhenUserChangedEventHandler 
     : IDomainEventHandler<DomainEvent.UserRegistedWithLocal>, 
     IDomainEventHandler<DomainEvent.UserVerifiedEmailRegist>,
     IDomainEventHandler<DomainEvent.UserOtpChanged>,
     IDomainEventHandler<DomainEvent.UserPasswordChanged>,
-    IDomainEventHandler<DomainEvent.UserCreatedWithGoogle>
-
+    IDomainEventHandler<DomainEvent.UserCreatedWithGoogle>,
+    IDomainEventHandler<Contract.Services.Accounts.DomainEvent.UserEmailChanged>,
+    IDomainEventHandler<Contract.Services.Accounts.DomainEvent.UserPasswordChanged>
 {
     private readonly IEmailService _emailService;
     private readonly ClientSetting _clientSetting;
@@ -74,5 +75,27 @@ public sealed class SendEmailWhenUserChangedEventHandler
             "EmailRegisterWithGoogle.html", new Dictionary<string, string> {
             {"ToEmail", notification.Email},
         });
+    }
+
+    public async Task Handle(Contract.Services.Accounts.DomainEvent.UserEmailChanged notification, CancellationToken cancellationToken)
+    {
+        await _emailService.SendMailAsync
+            (notification.Email,
+            "Change email",
+            "EmailUserChangeEmail.html", new Dictionary<string, string> {
+            {"ToEmail", notification.Email},
+               {"Link", $"{_clientSetting.Url}{_clientSetting.VerifyChangeEmail}/{notification.UserId}"}
+        });
+    }
+
+    public async Task Handle(Contract.Services.Accounts.DomainEvent.UserPasswordChanged notification, CancellationToken cancellationToken)
+    {
+        await _emailService.SendMailAsync
+           (notification.Email,
+           "Change password",
+           "EmailUserChangePassword.html", new Dictionary<string, string> {
+            {"ToEmail", notification.Email},
+               {"Link", $"{_clientSetting.Url}{_clientSetting.VerifyChangePassword}/{notification.UserId}"}
+       });
     }
 }

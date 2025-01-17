@@ -132,4 +132,30 @@ public class Account : DomainEntity<Guid>
     {
         Password = newPassword;
     }
+
+    public void UpdateAvatarProfileUser(string cropAvatarUrl, string cropAvatarId, string fullAvatarUrl, string fullAvatarId)
+    {
+        CropAvatarUrl = cropAvatarUrl;
+        CropAvatarId = cropAvatarId;
+        FullAvatarUrl = fullAvatarUrl;
+        FullAvatarId = fullAvatarId;
+    }
+
+    public void UpdateInfoProfileUser(string firstName, string lastName, string phoneNumber, GenderType gender)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        PhoneNumber = phoneNumber;
+        GenderType = gender;
+    }
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+    }
+
+    public void ChangeUserIsDelete(bool isDelete)
+    {
+        IsDeleted = isDelete;
+    }
 }

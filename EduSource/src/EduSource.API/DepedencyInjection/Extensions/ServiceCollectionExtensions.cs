@@ -2,6 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using EduSource.Contract.Settings;
 using System.Text;
+using EduSource.Contract.Enumarations.Authentication;
+using System.Security.Claims;
 
 namespace EduSource.API.DepedencyInjection.Extensions;
 
@@ -54,6 +56,25 @@ public static class ServiceCollectionExtensions
 
         services.AddAuthorization(options =>
         {
+            // Admin Policy
+            options.AddPolicy("AdminPolicy", policy =>
+                policy.RequireClaim(ClaimTypes.Role, ((int)RoleType.Admin).ToString()));
+
+            // Staff Policy
+            options.AddPolicy("StaffPolicy", policy =>
+                policy.RequireClaim(ClaimTypes.Role, ((int)RoleType.Staff).ToString()));
+
+            // Member Policy
+            options.AddPolicy("MemberPolicy", policy =>
+                policy.RequireClaim(ClaimTypes.Role, ((int)RoleType.Member).ToString()));
+
+            // Member and Staff Policy
+            options.AddPolicy("MemberStaffPolicy", policy =>
+               policy.RequireAssertion(context =>
+                   context.User.HasClaim(c => c.Type == ClaimTypes.Role &&
+                       (c.Value == ((int)RoleType.Member).ToString() ||
+                        c.Value == ((int)RoleType.Staff).ToString()))
+               ));
         });
 
         return services;
