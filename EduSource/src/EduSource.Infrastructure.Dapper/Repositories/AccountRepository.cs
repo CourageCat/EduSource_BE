@@ -3,6 +3,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
+using EduSource.Contract.Abstractions.Shared;
+using EduSource.Contract.Services.Accounts;
+using System.Text;
 
 namespace EduSource.Infrastructure.Dapper.Repositories;
 public class AccountRepository : IAccountRepository
@@ -104,6 +107,53 @@ public class AccountRepository : IAccountRepository
             await connection.OpenAsync();
             var result = await connection.QuerySingleOrDefaultAsync<Account>(sql, new { Id = id });
             return result;
+        }
+    }
+
+    public async Task<PagedResult<Account>> GetPagedAsync(int pageIndex, int pageSize, Filter.AccountFilter filterParams, string[] selectedColumns)
+    {
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            // Valid columns for selecting
+            var validColumns = new HashSet<string> { "Id", "FirstName", "LastName", "Email", "PhoneNumber", "Password", "RoleId", "Gender", "LoginType", "IsDeleted", "CropAvatarUrl", "FullAvatarUrl", "CropCoverPhotoUrl", "FullCoverPhotoUrl", "Biography" };
+            var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
+
+            // If no selected columns, select all
+            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : "*";
+
+            // Start building the query
+            var queryBuilder = new StringBuilder($"SELECT {selectedColumnsString} FROM Accounts WHERE 1=1");
+
+            var parameters = new DynamicParameters();
+
+            // Filter by Id
+            if (filterParams?.Id.HasValue == true)
+            {
+                queryBuilder.Append(" AND Id LIKE @Id");
+                parameters.Add("Id", $"%{filterParams.Id}%");
+            }
+
+            // Filter by FirstName
+            if (!string.IsNullOrEmpty(filterParams?.FirstName))
+            {
+                queryBuilder.Append(" AND FirstName LIKE @FirstName");
+                parameters.Add("FirstName", $"%{filterParams.FirstName}%");
+            }
+
+            // Filter by IsDeleted (e.g., true/false)
+            if (filterParams?.IsDeleted.HasValue == true)
+            {
+                queryBuilder.Append(" AND IsDeleted = @IsDeleted");
+                parameters.Add("IsDeleted", filterParams.IsDeleted.Value);
+            }
+
+            if (filterParams?.RoleType.HasValue == true)
+            {
+                queryBuilder.Append(" AND RoleId = @RoleId");
+                parameters.Add("RoleId", (int)filterParams.RoleType.Value);  // Cast RoleType enum to its integer value
+            }
+
+            return await PagedResult<Account>.CreateAsync(connection, queryBuilder.ToString(), parameters, pageIndex, pageSize);
         }
     }
 

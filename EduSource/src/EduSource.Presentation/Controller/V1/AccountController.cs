@@ -43,19 +43,19 @@ public class AccountController : ApiController
         return Ok(result);
     }
 
-    //[Authorize(Policy = "MemberPolicy")]
-    //[HttpGet("get-account-profile", Name = "GetAccountProfile")]
-    //[ProducesResponseType(StatusCodes.Status200OK)]
-    //[ProducesResponseType(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetAccountProfile()
-    //{
-    //    var userId = User.FindFirstValue("UserId");
-    //    var result = await Sender.Send(new Query.GetUserProfileQuery(Guid.Parse(userId)));
-    //    if (result.IsFailure)
-    //        return HandlerFailure(result);
+    [Authorize(Policy = "MemberPolicy")]
+    [HttpGet("get-account-profile", Name = "GetAccountProfile")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAccountProfile()
+    {
+        var userId = User.FindFirstValue("UserId");
+        var result = await Sender.Send(new Query.GetUserProfileQuery(Guid.Parse(userId)));
+        if (result.IsFailure)
+            return HandlerFailure(result);
 
-    //    return Ok(result);
-    //}
+        return Ok(result);
+    }
 
     [Authorize(Policy = "MemberPolicy")]
     [HttpPut("update-email-profile", Name = "UpdateEmailProfile")]

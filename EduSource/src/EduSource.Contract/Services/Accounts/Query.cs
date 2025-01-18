@@ -6,7 +6,7 @@ namespace EduSource.Contract.Services.Accounts
 {
     public static class Query
     {
-        public record GetUserProfileQuery(Guid UserId) : IQuery<Success<UserResponse>>;
+        public record GetUserProfileQuery(Guid UserId) : IQuery<Success<UserInfoResponse>>;
 
         public record GetUsersQueryHandler(int PageIndex,
          int PageSize,

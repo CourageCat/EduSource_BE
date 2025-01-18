@@ -97,4 +97,7 @@ public enum MessagesList
 
     [Message("Avatar upload successful", "account_noti_03")]
     AccountUploadAvatarSuccess,
+
+    [Message("Get information profile successfully", "account_noti_04")]
+    AccountGetInfoProfileSuccess,
 }
