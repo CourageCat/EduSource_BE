@@ -35,6 +35,7 @@ public sealed class VerifyUpdateEmailCommandHandler : ICommandHandler<Command.Ve
         if (user == null) throw new AccountNotFoundException();
         
         user.UpdateEmail(newEmail);
+        _efUnitOfWork.AccountRepository.Update(user);
         await _efUnitOfWork.SaveChangesAsync(cancellationToken);
 
         await _responseCacheService.DeleteCacheResponseAsync($"changeemail_{request.UserId}");
