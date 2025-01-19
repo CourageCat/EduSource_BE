@@ -24,10 +24,16 @@ public static class ServiceCollectionExtensions
             .EnableSensitiveDataLogging(true)
             .UseLazyLoadingProxies(true) // => If UseLazyLoadingProxies, all of the navigation fields should be VIRTUAL
             .UseSqlServer(
-                connectionString: configuration.GetConnectionString("ConnectionStrings"),
-                    sqlServerOptionsAction: optionsBuilder
-                        => optionsBuilder
-                        .MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name));
+    connectionString: configuration.GetConnectionString("ConnectionStrings"),
+        sqlServerOptionsAction: optionsBuilder
+            => optionsBuilder
+            .MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name)
+            .EnableRetryOnFailure(
+                maxRetryCount: 5, // Retry up to 5 times
+                maxRetryDelay: TimeSpan.FromSeconds(30), // Maximum delay between retries
+                errorNumbersToAdd: null // Use default error codes for retries
+            ));
+
         });
     }
 
