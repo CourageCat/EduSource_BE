@@ -31,7 +31,6 @@ public sealed class VerifyChangePasswordCommandHandler : ICommandHandler<Command
         var newPassword = JsonConvert.DeserializeObject<string>(changePasswordMemory);
 
         user.UpdatePassword(newPassword);
-        _efUnitOfWork.AccountRepository.Update(user);
         await _efUnitOfWork.SaveChangesAsync(cancellationToken);
         
         await _responseCacheService.DeleteCacheResponseAsync($"changepassword_{request.UserId}");
