@@ -1,6 +1,6 @@
 ﻿using EduSource.Contract.Enumarations.Book;
 
-namespace Neighbor.Contract.Services.Products;
+namespace EduSource.Contract.Services.Books;
 
 public static class Filter
 {

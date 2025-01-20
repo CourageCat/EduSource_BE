@@ -2,7 +2,7 @@
 
 namespace EduSource.Contract.Services.Authentications.Validators;
 
-internal class RegisterValidator : AbstractValidator<Command.RegisterCommand>
+public class RegisterValidator : AbstractValidator<Command.RegisterCommand>
 {
     public RegisterValidator()
     {

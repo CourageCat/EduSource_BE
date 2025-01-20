@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
                 cfg =>
                 {
                     cfg.AddProfile<BookProfile>();
+                    cfg.AddProfile<ProductProfile>();
                 }
         );
         return services;

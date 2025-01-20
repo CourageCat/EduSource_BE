@@ -2,7 +2,7 @@
 
 namespace EduSource.Contract.Services.Authentications.Validators;
 
-internal class LoginValidator : AbstractValidator<Query.LoginQuery>
+public class LoginValidator : AbstractValidator<Query.LoginQuery>
 {
     public LoginValidator()
     {

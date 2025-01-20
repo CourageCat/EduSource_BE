@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Neighbor.Contract.Services.Products.Filter;
+using static EduSource.Contract.Services.Books.Filter;
 
 namespace EduSource.Presentation.Controller.V1
 {

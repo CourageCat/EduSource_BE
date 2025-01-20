@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 
 namespace EduSource.Contract.Services.Authentications.Validators;
-internal class VerifyEmailValidator : AbstractValidator<Command.VerifyEmailCommand>
+public class VerifyEmailValidator : AbstractValidator<Command.VerifyEmailCommand>
 {
     public VerifyEmailValidator()
     {

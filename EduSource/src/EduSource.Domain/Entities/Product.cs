@@ -14,7 +14,8 @@ public class Product : DomainEntity<Guid>
     public double Price { get; private set; }
     public CategoryType Category { get; private set; }
     public string Description { get; private set; }
-    public int Unit {  get; private set; }
+    public ContentType ContentType {  get; private set; }
+    public int? Unit {  get; private set; }
     public UploadType UploadType { get; private set; }
     public int TotalPage { get; private set; }
     public double Size { get; private set; }
@@ -34,4 +35,33 @@ public class Product : DomainEntity<Guid>
     public virtual ICollection<ProductInCombo> ProductInCombos { get; private set; }
     public virtual ICollection<ImageOfProduct> ImageOfProducts { get; private set; }
     public virtual ICollection<Feedback> Feedbacks { get; private set; }
+
+    public static Product CreateProductForSeedData(Guid id, string name, double price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    {
+        return new Product()
+        {
+            Id = id,
+            Name = name,
+            Price = price,
+            Category = category,
+            Description = description,
+            ContentType = contentType,
+            Unit = unit,
+            UploadType = uploadType,
+            TotalPage = totalPage,
+            Size = size,
+            ImageId = imageId,
+            ImageUrl = imageUrl,
+            FileId = fileId,
+            FileUrl = fileUrl,
+            Rating = 0,
+            IsPublic = true,
+            IsApproved = true,
+            BookId = bookId,
+            AccountId = accountId,
+            CreatedDate = DateTime.UtcNow,
+            ModifiedDate = DateTime.UtcNow,
+            IsDeleted = false
+        };
+    }
 }

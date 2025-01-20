@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
 using EduSource.Contract.Abstractions.Shared;
-using Neighbor.Contract.Services.Products;
+using EduSource.Contract.Services.Books;
 using System.Text;
 
 namespace EduSource.Infrastructure.Dapper.Repositories;
@@ -87,7 +87,7 @@ public class BookRepository : IBookRepository
             {
                 queryBuilder.Append(" AND Category = @Category");
                 totalCountQuery.Append(" AND Category = @Category");
-                parameters.Add("Category", $"{filterParams.Category}");
+                parameters.Add("Category", $"{(int)filterParams.Category}");
             }
 
             //Count TotalCount

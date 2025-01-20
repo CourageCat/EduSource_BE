@@ -1,6 +1,6 @@
 ﻿using EduSource.Contract.Abstractions.Message;
 using EduSource.Contract.Abstractions.Shared;
-using static Neighbor.Contract.Services.Products.Filter;
+using static EduSource.Contract.Services.Books.Filter;
 
 namespace EduSource.Contract.Services.Books;
 

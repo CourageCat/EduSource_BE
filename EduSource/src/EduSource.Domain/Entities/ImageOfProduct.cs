@@ -13,4 +13,17 @@ public class ImageOfProduct : DomainEntity<Guid>
     public string ImageUrl { get; private set; }
     public Guid ProductId { get; private set; }
     public virtual Product Product { get; private set; }
+
+    public static ImageOfProduct CreateImageOfProductForSeedData(string imageId, string imageUrl, Guid productId)
+    {
+        return new ImageOfProduct()
+        {
+            ImageId = imageId,
+            ImageUrl = imageUrl,
+            ProductId = productId,
+            CreatedDate = DateTime.UtcNow,
+            ModifiedDate = DateTime.UtcNow,
+            IsDeleted = false
+        };
+    }
 }

@@ -10,6 +10,39 @@ public class Account : DomainEntity<Guid>
     }
 
     public Account
+        (Guid id,
+        string firstName,
+        string lastName,
+        string email,
+        string phoneNumber,
+        bool status,
+        string password,
+        GenderType gender,
+        string cropAvatarUrl,
+        string cropAvatarId,
+        string fullAvatarUrl,
+        string fullAvatarId,
+        LoginType loginType,
+        RoleType roleId
+        )
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Password = password;
+        GenderType = gender;
+        CropAvatarUrl = cropAvatarUrl;
+        CropAvatarId = cropAvatarId;
+        FullAvatarUrl = fullAvatarUrl;
+        FullAvatarId = fullAvatarId;
+        LoginType = loginType;
+        RoleId = roleId;
+        IsDeleted = false;
+    }
+
+    public Account
         (string firstName,
         string lastName,
         string email,
@@ -126,6 +159,20 @@ public class Account : DomainEntity<Guid>
             avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1735300380/edusource/female-avatar.png";
         }
         return new Account(firstName, lastName, email, "", false, "", gender, avatarUrl, "", avatarUrl, "", LoginType.Google, RoleType.Member);
+    }
+
+    public static Account CreateAdminAccount
+       (string email, string password)
+    {
+        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1737386413/edusource/admin-avatar.png";
+        return new Account("Admin", "", email, "", false, password, GenderType.Male, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Admin);
+    }
+
+    public static Account CreateStaffAssistant
+      (Guid id, string email, string password)
+    {
+        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1737386425/edusource/staff-avatar.pngg";
+        return new Account(id, "Staff", "", email, "", false, password, GenderType.Male, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Staff);
     }
 
     public void UpdatePassword(string newPassword)

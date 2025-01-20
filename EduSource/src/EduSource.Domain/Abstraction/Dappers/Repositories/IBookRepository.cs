@@ -1,7 +1,7 @@
 ﻿using EduSource.Contract.Abstractions.Shared;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
-using static Neighbor.Contract.Services.Products.Filter;
+using static EduSource.Contract.Services.Books.Filter;
 
 namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 

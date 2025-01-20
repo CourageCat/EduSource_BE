@@ -17,10 +17,11 @@ public class Book : DomainEntity<Guid>
     public CategoryType Category {  get; private set; } 
     public virtual ICollection<Product> Products { get; private set; }
 
-    public static Book CreateBookForSeedData(string name, string imageId, string imageUrl, int gradeLevel, CategoryType category)
+    public static Book CreateBookForSeedData(Guid id, string name, string imageId, string imageUrl, int gradeLevel, CategoryType category)
     {
         return new Book
         {
+            Id = id,
             Name = name,
             ImageId = imageId,
             ImageUrl = imageUrl,
