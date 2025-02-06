@@ -6,6 +6,7 @@ using EduSource.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EduSource.Infrastructure.Dapper.Repositories;
 
@@ -35,6 +36,47 @@ public class ProductRepository : IProductRepository
     public Task<Product>? GetByIdAsync(Guid Id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Product> GetDetailsAsync(Guid productId)
+    {
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            // Query products and their images
+            var productData = new Dictionary<Guid, Product>();
+
+            await connection.QueryAsync<Product, ImageOfProduct, Book, Product>(
+                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
+                iop.ImageUrl, iop.ImageId, iop.CreatedDate AS ImageCreatedDate,
+                b.Id, b.Name, b.ImageUrl, b.GradeLevel, b.Category
+                FROM Products p
+                LEFT JOIN ImageOfProducts iop ON p.Id = iop.ProductId
+                JOIN Books b ON b.Id = p.BookId
+                WHERE p.Id = @Id",
+                (product, productImage, book) =>
+                {
+                    if (!productData.TryGetValue(product.Id, out var existingProduct))
+                    {
+                        // If this product is not yet added, create it
+                        existingProduct = product;
+                        existingProduct.UpdateImageOfProducts(new List<ImageOfProduct>());
+                        productData.Add(existingProduct.Id, existingProduct);
+                    }
+
+                    // Add images to the product object
+                    if (productImage != null && !existingProduct.ImageOfProducts.Any(img => img.ImageId == productImage.ImageId))
+                    {
+                        existingProduct.ImageOfProducts.Add(productImage);
+                    }
+                    existingProduct.UpdateBook(book);
+                    return existingProduct;
+                },
+                new { Id = productId },
+                splitOn: "ProductModifiedDate, ImageCreatedDate");
+
+            return productData.Values.ToList()[0];
+        }
     }
 
     public async Task<PagedResult<Product>> GetPagedAsync(int pageIndex, int pageSize, Filter.ProductFilter filterParams, string[] selectedColumns)

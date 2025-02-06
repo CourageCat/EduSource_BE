@@ -11,4 +11,6 @@ public static class Query
             int PageSize,
             ProductFilter FilterParams,
             string[] SelectedColumns) : IQuery<Success<PagedResult<ProductResponse>>>;
+
+    public record GetProductByIdQuery(Guid Id) : IQuery<Success<ProductResponse>>;
 }

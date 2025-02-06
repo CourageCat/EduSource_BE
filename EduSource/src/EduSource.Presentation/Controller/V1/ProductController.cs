@@ -33,4 +33,16 @@ public class ProductController : ApiController
 
         return Ok(result);
     }
+
+    [HttpGet("get_product_by_id", Name = "GetProductById")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> GetProductById([FromQuery] Query.GetProductByIdQuery Queries)
+    {
+        var result = await Sender.Send(Queries);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Ok(result);
+    }
 }

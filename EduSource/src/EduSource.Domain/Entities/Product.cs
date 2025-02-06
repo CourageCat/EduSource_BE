@@ -64,4 +64,14 @@ public class Product : DomainEntity<Guid>
             IsDeleted = false
         };
     }
+
+    public void UpdateBook(Book book)
+    {
+        Book = book;
+    }
+
+    public void UpdateImageOfProducts(List<ImageOfProduct> imageOfProducts)
+    {
+        ImageOfProducts = imageOfProducts;
+    }
 }

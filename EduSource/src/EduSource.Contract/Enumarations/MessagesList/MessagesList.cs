@@ -102,8 +102,14 @@ public enum MessagesList
     AccountGetInfoProfileSuccess,
 
     [Message("Can not find any products!", "product_noti_exception_01")]
+    ProductsNotFoundException,
+
+    [Message("Can not find this Product!", "product_noti_exception_02")]
     ProductNotFoundException,
 
     [Message("All Products: ", "product_noti_success_01")]
     ProductGetAllProductsSuccess,
+
+    [Message("Details of Product: ", "product_noti_success_02")]
+    ProductGetDetailsProductsSuccess,
 }
