@@ -66,7 +66,7 @@ public enum MessagesList
     AccountNotFoundException,
 
     [Message("Can not find any books!", "book_noti_exception_01")]
-    BookNotFoundException,
+    BooksNotFoundException,
 
     [Message("All Books: ", "book_noti_success_01")]
     BookGetAllBooksSuccess,
@@ -112,4 +112,10 @@ public enum MessagesList
 
     [Message("Details of Product: ", "product_noti_success_02")]
     ProductGetDetailsProductsSuccess,
+
+    [Message("Create Product successfully", "product_noti_success_03")]
+    ProductCreateProductSuccess,
+
+    [Message("Can not find this Book!", "book_noti_exception_01")]
+    BookNotFoundException,
 }

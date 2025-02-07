@@ -1,5 +1,6 @@
 ﻿using EduSource.Contract.Enumarations.Product;
 using EduSource.Domain.Abstraction.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace EduSource.Domain.Entities;
 
@@ -14,8 +15,8 @@ public class Product : DomainEntity<Guid>
     public double Price { get; private set; }
     public CategoryType Category { get; private set; }
     public string Description { get; private set; }
-    public ContentType ContentType {  get; private set; }
-    public int? Unit {  get; private set; }
+    public ContentType ContentType { get; private set; }
+    public int? Unit { get; private set; }
     public UploadType UploadType { get; private set; }
     public int TotalPage { get; private set; }
     public double Size { get; private set; }
@@ -73,5 +74,33 @@ public class Product : DomainEntity<Guid>
     public void UpdateImageOfProducts(List<ImageOfProduct> imageOfProducts)
     {
         ImageOfProducts = imageOfProducts;
+    }
+
+    public static Product CreateProduct(string name, double price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    {
+        return new Product()
+        {
+            Name = name,
+            Price = price,
+            Category = category,
+            Description = description,
+            ContentType = contentType,
+            Unit = unit,
+            UploadType = uploadType,
+            TotalPage = totalPage,
+            Size = size,
+            ImageId = mainImageId,
+            ImageUrl = mainImageUrl,
+            FileId = fileId,
+            FileUrl = fileUrl,
+            Rating = 0,
+            IsPublic = true,
+            IsApproved = true,
+            BookId = bookId,
+            AccountId = accountId,
+            CreatedDate = DateTime.UtcNow,
+            ModifiedDate = DateTime.UtcNow,
+            IsDeleted = false,
+        };
     }
 }

@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IOrderRepository, OrderRepository>()
             .AddTransient<IProductInComboRepository, ProductInComboRepository>()
             .AddTransient<IProductRepository, ProductRepository>()
-            .AddTransient<IWishlistRepository, WishlistRepository>();
+            .AddTransient<IWishlistRepository, WishlistRepository>()
+            .AddTransient<IBookRepository, BookRepository>();
     }
 }

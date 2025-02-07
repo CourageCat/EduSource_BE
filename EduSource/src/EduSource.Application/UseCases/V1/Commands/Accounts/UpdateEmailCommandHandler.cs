@@ -6,7 +6,7 @@ using EduSource.Contract.Enumarations.MessagesList;
 using EduSource.Contract.Services.Accounts;
 using EduSource.Domain.Abstraction.EntitiyFramework;
 using MediatR;
-using static EduSource.Domain.Exceptions.AccountException.AccountNotFoundException;
+using static EduSource.Domain.Exceptions.AccountException;
 namespace EduSource.Application.UseCases.V1.Commands.Account;
 
 public sealed class UpdateEmailCommandHandler : ICommandHandler<Command.UpdateEmailCommand, Success>

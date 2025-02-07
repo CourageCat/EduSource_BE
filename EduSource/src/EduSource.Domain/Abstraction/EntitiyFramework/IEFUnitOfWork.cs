@@ -15,4 +15,5 @@ public interface IEFUnitOfWork : IAsyncDisposable
     IProductRepository ProductRepository { get; }   
     IWishlistRepository WishlistRepository { get; }
     ICartRepository CartRepository { get; }
+    IBookRepository BookRepository { get; }
 }

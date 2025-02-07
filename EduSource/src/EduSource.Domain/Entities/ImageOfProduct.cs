@@ -26,4 +26,17 @@ public class ImageOfProduct : DomainEntity<Guid>
             IsDeleted = false
         };
     }
+
+    public static ImageOfProduct CreateImageOfProduct(string imageId, string imageUrl, Guid productId)
+    {
+        return new ImageOfProduct()
+        {
+            ImageId = imageId,
+            ImageUrl = imageUrl,
+            ProductId = productId,
+            CreatedDate = DateTime.UtcNow,
+            ModifiedDate = DateTime.UtcNow,
+            IsDeleted = false
+        };
+    }
 }

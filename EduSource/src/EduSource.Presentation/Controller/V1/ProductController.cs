@@ -4,8 +4,10 @@ using EduSource.Contract.DTOs.ProductDTOs;
 using EduSource.Contract.Services.Products;
 using EduSource.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static EduSource.Contract.DTOs.ProductDTOs.ProductRequestDTO;
 using static EduSource.Contract.Services.Products.Filter;
 
@@ -40,6 +42,20 @@ public class ProductController : ApiController
     public async Task<IActionResult> GetProductById([FromQuery] Query.GetProductByIdQuery Queries)
     {
         var result = await Sender.Send(Queries);
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Ok(result);
+    }
+
+    [Authorize(Policy = "StaffPolicy")]
+    [HttpPost("create_product", Name = "CreateProduct")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequestDTO productRequestDTO)
+    {
+        var userId = Guid.Parse(User.FindFirstValue("UserId"));
+        var result = await Sender.Send(new Command.CreateProductCommand(productRequestDTO.Name, productRequestDTO.Price, productRequestDTO.Category, productRequestDTO.Description, productRequestDTO.ContentType, productRequestDTO.Unit, productRequestDTO.UploadType, productRequestDTO.TotalPage, productRequestDTO.Size, productRequestDTO.MainImage, productRequestDTO.File, productRequestDTO.OtherImages, productRequestDTO.BookId, userId));
         if (result.IsFailure)
             return HandlerFailure(result);
 
