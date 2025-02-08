@@ -118,4 +118,23 @@ public enum MessagesList
 
     [Message("Can not find this Book!", "book_noti_exception_01")]
     BookNotFoundException,
+
+    [Message("Product has already added to cart!", "cart_noti_exception_01")]
+    CartProductHasAlreadyAddedToCartException,
+
+    [Message("Can not found this Product in cart!", "cart_noti_exception_02")]
+    CartProductNotFoundInCartException,
+
+    [Message("Can not found any Products in cart!", "cart_noti_exception_03")]
+    CartProductsNotFoundInCartException,
+
+    [Message("Add Product to cart successfully", "cart_noti_success_01")]
+    CartAddedProductToCartSuccess,
+
+    [Message("Remove Product from cart successfully", "cart_noti_success_02")]
+    CartRemovedProductFromCartSuccess,
+
+    [Message("All Products in cart: ", "cart_noti_success_03")]
+    CartGetAllProductsFromCartSuccess,
+
 }

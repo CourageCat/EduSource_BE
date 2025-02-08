@@ -34,7 +34,7 @@ public sealed class GetAllProductQueryHandler : IQueryHandler<Query.GetAllProduc
         //Check if ListCategory is empty
         if (listProducts.Items.Count == 0)
         {
-            return Result.Success(new Success<PagedResult<ProductResponse>>(MessagesList.ProductNotFoundException.GetMessage().Code, MessagesList.ProductNotFoundException.GetMessage().Message, result));
+            return Result.Success(new Success<PagedResult<ProductResponse>>(MessagesList.ProductsNotFoundException.GetMessage().Code, MessagesList.ProductsNotFoundException.GetMessage().Message, result));
         }
         //Return result
         return Result.Success(new Success<PagedResult<ProductResponse>>(MessagesList.ProductGetAllProductsSuccess.GetMessage().Code, MessagesList.ProductGetAllProductsSuccess.GetMessage().Message, result));

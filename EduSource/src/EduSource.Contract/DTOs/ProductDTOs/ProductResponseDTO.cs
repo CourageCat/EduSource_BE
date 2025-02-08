@@ -4,7 +4,7 @@ namespace EduSource.Contract.DTOs.ProductDTOs;
 
 public static class ProductResponseDTO
 {
-    public class BookResponse
+    public sealed class BookResponse
     {
         public string Name { get; set; }
         public string ImageUrl { get; set; }

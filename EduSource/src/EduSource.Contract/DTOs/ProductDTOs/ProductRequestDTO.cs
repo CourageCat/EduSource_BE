@@ -10,7 +10,7 @@ namespace EduSource.Contract.DTOs.ProductDTOs
 {
     public static class ProductRequestDTO
     {
-        public class GetAllProductRequestDTO
+        public sealed class GetAllProductRequestDTO
         {
             public string? Name { get; set; }
             public double? Price { get; set; }
@@ -27,7 +27,7 @@ namespace EduSource.Contract.DTOs.ProductDTOs
             public Guid? BookId { get; set; }
         }
 
-        public class CreateProductRequestDTO
+        public sealed class CreateProductRequestDTO
         {
             public string Name { get; set; }
             public double Price { get; set; }
