@@ -86,7 +86,7 @@ public static class SeedData
         if (!context.Products.Any())
         {
             context.Products.AddRange(
-                Product.CreateProductForSeedData(listProduct[0], "Unit 1: Getting Started", 25, Contract.Enumarations.Product.CategoryType.Exercise, "All Exercises for Unit 1: Getting Started of I Learn Smart Start Book", ContentType.Unit, 1, UploadType.Pdf, 10, 8.333, "Screenshot_2025-01-20_230706_g3dkld", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389331/edusource/Screenshot_2025-01-20_230706_g3dkld.png", "I-Learn-Smart-Start-3-Getting-Started", "https://res.cloudinary.com/dc4eascme/image/upload/v1737366785/edusource/I-Learn-Smart-Start-3-Getting-Started.pdf", ILearnSmartStart3, staffId));
+                Product.CreateProductForSeedData(listProduct[0], "Unit 1: Getting Started", 25000, Contract.Enumarations.Product.CategoryType.Exercise, "All Exercises for Unit 1: Getting Started of I Learn Smart Start Book", ContentType.Unit, 1, UploadType.Pdf, 10, 8.333, "Screenshot_2025-01-20_230706_g3dkld", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389331/edusource/Screenshot_2025-01-20_230706_g3dkld.png", "I-Learn-Smart-Start-3-Getting-Started", "https://res.cloudinary.com/dc4eascme/image/upload/v1737366785/edusource/I-Learn-Smart-Start-3-Getting-Started.pdf", ILearnSmartStart3, staffId));
         }
         if (!context.ImageOfProducts.Any())
         {

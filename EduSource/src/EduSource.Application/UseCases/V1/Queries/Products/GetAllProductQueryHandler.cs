@@ -27,7 +27,7 @@ public sealed class GetAllProductQueryHandler : IQueryHandler<Query.GetAllProduc
         var listProductsMapped = new List<ProductResponse>();
         listProducts.Items.ForEach(product =>
         {
-            listProductsMapped.Add(new ProductResponse(product.Id, product.Name, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, product.FileUrl, product.Rating, product.IsPublic, product.IsApproved, null, null));
+            listProductsMapped.Add(new ProductResponse(product.Id, product.Name, product.Price, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, product.FileUrl, product.Rating, product.IsPublic, product.IsApproved, null, null));
         });
         //Mapping Category to CategoryResponse
         var result = new PagedResult<ProductResponse>(listProductsMapped, listProducts.PageIndex, listProducts.PageSize, listProducts.TotalCount, listProducts.TotalPages);

@@ -84,7 +84,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "Id", "Name", "Category", "Unit", "ContentType", "UploadType", "TotalPage", "Size", "ImageUrl", "FileUrl", "Rating", "IsPublic", "IsApproved" };
+            var validColumns = new HashSet<string> { "Id", "Name", "Price", "Category", "Unit", "ContentType", "UploadType", "TotalPage", "Size", "ImageUrl", "FileUrl", "Rating", "IsPublic", "IsApproved" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
