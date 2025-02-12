@@ -88,7 +88,7 @@ public class ProductRepository : IProductRepository
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
-            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : "*";
+            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : string.Join(", ", validColumns); ;
 
             // Start building the query
             var queryBuilder = new StringBuilder($"SELECT {selectedColumnsString} FROM Products WHERE 1=1 AND IsDeleted = 0");
@@ -240,7 +240,7 @@ public class ProductRepository : IProductRepository
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
-            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : "*";
+            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : string.Join(", ", validColumns); ;
 
             // Start building the query
             var queryBuilder = new StringBuilder(
