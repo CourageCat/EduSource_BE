@@ -32,21 +32,46 @@ public class MediaService : IMediaService
 
     public async Task<ImageDTO> UploadImageAsync(string fileName, IFormFile fileImage)
     {
-        var uploadParams = new ImageUploadParams
+        var isImage = fileImage.ContentType.StartsWith("image");
+        var fileExtension = Path.GetExtension(fileName); // Get the file extension
+        var fileBaseName = Path.GetFileNameWithoutExtension(fileName); // Get filename without extension
+
+        UploadResult uploadResult;
+
+        if (isImage)
         {
-            File = new FileDescription(fileName, fileImage.OpenReadStream()),
-            Folder = _cloudinarySetting.Folder,
-        };
-        var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(fileName, fileImage.OpenReadStream()),
+                Folder = _cloudinarySetting.Folder
+            };
+            uploadResult = await _cloudinary.UploadAsync(uploadParams);
+        }
+        else
+        {
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(fileName, fileImage.OpenReadStream()),
+                Folder = _cloudinarySetting.Folder,
+                PublicId = fileName
+            };
+            uploadResult = await _cloudinary.UploadAsync(uploadParams);
+        }
+
         if (uploadResult?.StatusCode != System.Net.HttpStatusCode.OK) return null;
-        var imageUrl = uploadResult.Url.AbsoluteUri;
-        var imageId = uploadResult.PublicId;
+
+        // Construct the correct download URL with the file extension
+        var fileUrl = $"{uploadResult.Url.AbsoluteUri}?fl_attachment={fileBaseName}{fileExtension}";
+
         return new ImageDTO
         {
-            ImageUrl = imageUrl,
-            PublicImageId = imageId
+            ImageUrl = fileUrl,
+            PublicImageId = uploadResult.PublicId
         };
     }
+
+
+
 
     public async Task<List<ImageDTO>> UploadImagesAsync(List<IFormFile> fileImages)
     {

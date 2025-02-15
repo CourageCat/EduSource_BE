@@ -7,7 +7,7 @@ namespace EduSource.Contract.Services.Products.Validators;
 public class CreateProductValidator : AbstractValidator<Command.CreateProductCommand>
 {
     private readonly List<string> _allowedImageExtensions = new() { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
-    private readonly List<string> _allowedFileExtensions = new() { ".pdf", ".pp", ".zip", ".zar" };
+    private readonly List<string> _allowedFileExtensions = new() { ".pdf", ".ppt", ".pptx", ".zip", ".zar" };
     public CreateProductValidator() 
     {
         RuleFor(x => x.Name)
