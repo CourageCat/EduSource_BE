@@ -236,7 +236,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "p.Id", "p.Name", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
@@ -361,6 +361,32 @@ public class ProductRepository : IProductRepository
             var items = (await connection.QueryAsync<Product>(paginatedQuery, parameters)).ToList();
 
             return new PagedResult<Product>(items, pageIndex, pageSize, totalCount, totalPages);
+        }
+    }
+
+    public async Task<IEnumerable<Product>> GetProductsInCartToCheckout(Guid accountId)
+    {
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            // Valid columns for selecting
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+
+            // If no selected columns, select all
+            var selectedColumnsString = string.Join(", ", validColumns); ;
+
+            // Start building the query
+            var queryBuilder = new StringBuilder(
+                $@"SELECT {selectedColumnsString} FROM Products p 
+                JOIN Carts c ON p.Id = c.ProductId
+                WHERE 1=1 AND p.IsDeleted = 0 AND c.AccountId = @AccountId");
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("AccountId", $"{accountId}");
+
+            var items = (await connection.QueryAsync<Product>(queryBuilder.ToString(),  parameters)).ToList();
+
+            return items;
         }
     }
 

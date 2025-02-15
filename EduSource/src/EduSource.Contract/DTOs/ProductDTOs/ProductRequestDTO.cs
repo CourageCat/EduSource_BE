@@ -30,7 +30,7 @@ namespace EduSource.Contract.DTOs.ProductDTOs
         public sealed class CreateProductRequestDTO
         {
             public string Name { get; set; }
-            public double Price { get; set; }
+            public int Price { get; set; }
             public CategoryType Category { get; set; }
             public string Description { get; set; }
             public ContentType ContentType { get; set; }

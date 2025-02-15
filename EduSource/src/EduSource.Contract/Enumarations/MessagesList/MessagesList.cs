@@ -125,6 +125,9 @@ public enum MessagesList
     [Message("Can not found this Product in cart!", "cart_noti_exception_02")]
     CartProductNotFoundInCartException,
 
+    [Message("There are no products in cart to checkout!", "cart_noti_exception_03")]
+    CartCheckoutWithNoProductsInCartException,
+
     [Message("Can not found any Products in cart!", "cart_noti_exception_03")]
     CartProductsNotFoundInCartException,
 

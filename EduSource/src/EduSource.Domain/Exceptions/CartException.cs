@@ -19,4 +19,12 @@ public static class CartException
 
         }
     }
+
+    public sealed class CheckoutWithNoProductsInCartException : NotFoundException
+    {
+        public CheckoutWithNoProductsInCartException() : base(MessagesList.CartCheckoutWithNoProductsInCartException.GetMessage().Message, MessagesList.CartCheckoutWithNoProductsInCartException.GetMessage().Code)
+        {
+
+        }
+    }
 }

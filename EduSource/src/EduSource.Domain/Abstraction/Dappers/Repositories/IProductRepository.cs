@@ -11,6 +11,8 @@ public interface IProductRepository : IGenericRepository<Product>
     Task<PagedResult<Product>> GetPagedAsync(int pageIndex, int pageSize, ProductFilter filterParams, string[] selectedColumns);
 
     Task<PagedResult<Product>> GetProductsInCart(int pageIndex, int pageSize, ProductFilter filterParams, string[] selectedColumns);
+    Task<IEnumerable<Product>> GetProductsInCartToCheckout(Guid accountId);
+
 
     Task<Product> GetDetailsAsync(Guid productId);
 

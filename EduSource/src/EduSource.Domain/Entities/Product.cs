@@ -12,7 +12,7 @@ public class Product : DomainEntity<Guid>
     }
 
     public string Name { get; private set; }
-    public double Price { get; private set; }
+    public int Price { get; private set; }
     public CategoryType Category { get; private set; }
     public string Description { get; private set; }
     public ContentType ContentType { get; private set; }
@@ -31,13 +31,14 @@ public class Product : DomainEntity<Guid>
     public virtual Account Account { get; private set; }
     public Guid BookId { get; private set; }
     public virtual Book Book { get; private set; }
+    public virtual ICollection<Cart> Carts { get; private set; }
     public virtual ICollection<Wishlist> Wishlists { get; private set; }
     public virtual ICollection<OrderDetails> OrderDetails { get; private set; }
     public virtual ICollection<ProductInCombo> ProductInCombos { get; private set; }
     public virtual ICollection<ImageOfProduct> ImageOfProducts { get; private set; }
     public virtual ICollection<Feedback> Feedbacks { get; private set; }
 
-    public static Product CreateProductForSeedData(Guid id, string name, double price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    public static Product CreateProductForSeedData(Guid id, string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
     {
         return new Product()
         {
@@ -76,7 +77,7 @@ public class Product : DomainEntity<Guid>
         ImageOfProducts = imageOfProducts;
     }
 
-    public static Product CreateProduct(string name, double price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    public static Product CreateProduct(string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
     {
         return new Product()
         {

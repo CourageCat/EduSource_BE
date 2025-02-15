@@ -131,6 +131,7 @@ public class Account : DomainEntity<Guid>
     public RoleType RoleId { get; private set; }
     public virtual Role Role { get; private set; }
     public virtual Seller Seller { get; private set; }
+    public virtual ICollection<Cart> Carts { get; private set; }
     public virtual ICollection<Feedback> Feedbacks { get; private set; }
     public virtual ICollection<Order> Orders { get; private set; }
     public virtual ICollection<Combo> Combos { get; private set; }

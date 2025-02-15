@@ -17,6 +17,7 @@ public class Combo : DomainEntity<Guid>
     public bool IsApproved { get; private set; }
     public Guid AccountId { get; private set; }
     public virtual Account Account { get; private set; }
+    public virtual ICollection<Cart> Carts { get; private set; }
     public virtual ICollection<Wishlist> Wishlists { get; private set; }
     public virtual ICollection<OrderDetails> OrderDetails { get; private set; }
     public virtual ICollection<ProductInCombo> ProductInCombos { get; private set; }
