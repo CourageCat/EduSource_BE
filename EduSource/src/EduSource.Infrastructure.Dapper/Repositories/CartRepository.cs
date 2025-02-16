@@ -22,6 +22,11 @@ public class CartRepository : ICartRepository
         throw new NotImplementedException();
     }
 
+    public Task<int> DeleteByAccountId(Guid AccountId)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<IReadOnlyCollection<Cart>> GetAllAsync()
     {
         throw new NotImplementedException();

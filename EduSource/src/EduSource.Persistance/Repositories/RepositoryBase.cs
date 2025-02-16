@@ -2,6 +2,7 @@
 using EduSource.Domain.Abstraction.Entities;
 using EduSource.Domain.Abstraction.EntitiyFramework.Repositories;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace EduSource.Persistence.Repositories;
 public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDisposable
@@ -81,6 +82,11 @@ public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDi
             entity.ModifiedDate = DateTime.Now;
         }
         _context.AddRange(entities);
+    }
+
+    public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includeProperties)
+    {
+        return await FindAll(null, includeProperties).AsTracking().ToListAsync();
     }
 }
 

@@ -6,4 +6,5 @@ namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 
 public interface ICartRepository : IGenericRepository<Cart>
 {
+    Task<int> DeleteByAccountId(Guid AccountId);
 }

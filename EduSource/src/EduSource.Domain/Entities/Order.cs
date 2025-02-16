@@ -13,4 +13,14 @@ public class Order : DomainEntity<Guid>
     public Guid AccountId { get; private set; }
     public virtual Account Account { get; private set; }
     public virtual ICollection<OrderDetails> OrderDetails { get; private set; }
+
+    public static Order CreateOrder(Guid id, double totalPrice, Guid accountId)
+    {
+        return new Order()
+        {
+            Id = id,
+            TotalPrice = totalPrice,
+            AccountId = accountId
+        };
+    }
 }

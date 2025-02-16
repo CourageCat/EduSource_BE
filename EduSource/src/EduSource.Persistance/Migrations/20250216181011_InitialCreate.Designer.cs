@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduSource.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250109094131_InitialCreate")]
+    [Migration("20250216181011_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -335,7 +335,7 @@ namespace EduSource.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ComboId")
+                    b.Property<Guid?>("ComboId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -382,6 +382,9 @@ namespace EduSource.Persistance.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
+                    b.Property<int>("ContentType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -421,8 +424,8 @@ namespace EduSource.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
@@ -433,7 +436,7 @@ namespace EduSource.Persistance.Migrations
                     b.Property<int>("TotalPage")
                         .HasColumnType("int");
 
-                    b.Property<int>("Unit")
+                    b.Property<int?>("Unit")
                         .HasColumnType("int");
 
                     b.Property<int>("UploadType")
@@ -574,17 +577,17 @@ namespace EduSource.Persistance.Migrations
             modelBuilder.Entity("EduSource.Domain.Entities.Cart", b =>
                 {
                     b.HasOne("EduSource.Domain.Entities.Account", "Account")
-                        .WithMany()
+                        .WithMany("Carts")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EduSource.Domain.Entities.Combo", "Combo")
-                        .WithMany()
+                        .WithMany("Carts")
                         .HasForeignKey("ComboId");
 
                     b.HasOne("EduSource.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("Carts")
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Account");
@@ -654,9 +657,7 @@ namespace EduSource.Persistance.Migrations
                 {
                     b.HasOne("EduSource.Domain.Entities.Combo", "Combo")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("ComboId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ComboId");
 
                     b.HasOne("EduSource.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
@@ -745,6 +746,8 @@ namespace EduSource.Persistance.Migrations
 
             modelBuilder.Entity("EduSource.Domain.Entities.Account", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("Combos");
 
                     b.Navigation("Feedbacks");
@@ -766,6 +769,8 @@ namespace EduSource.Persistance.Migrations
 
             modelBuilder.Entity("EduSource.Domain.Entities.Combo", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("Feedbacks");
 
                     b.Navigation("OrderDetails");
@@ -782,6 +787,8 @@ namespace EduSource.Persistance.Migrations
 
             modelBuilder.Entity("EduSource.Domain.Entities.Product", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("Feedbacks");
 
                     b.Navigation("ImageOfProducts");
