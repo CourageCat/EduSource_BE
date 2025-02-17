@@ -114,7 +114,10 @@ public enum MessagesList
     ProductGetAllProductsPurchasedSuccess,
 
     [Message("Details of Product: ", "product_noti_success_02")]
-    ProductGetDetailsProductsSuccess,
+    ProductGetDetailsProductSuccess,
+
+    [Message("Details of Product By User: ", "product_noti_success_02")]
+    ProductGetDetailsProductByUserSuccess,
 
     [Message("Create Product successfully", "product_noti_success_03")]
     ProductCreateProductSuccess,

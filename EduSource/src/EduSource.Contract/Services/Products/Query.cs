@@ -18,4 +18,6 @@ public static class Query
             string[] SelectedColumns) : IQuery<Success<PagedResult<ProductResponse>>>;
 
     public record GetProductByIdQuery(Guid Id) : IQuery<Success<ProductResponse>>;
+    public record GetProductByIdByUserQuery(Guid Id, Guid AccountId) : IQuery<Success<ProductResponse>>;
+
 }

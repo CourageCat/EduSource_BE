@@ -79,6 +79,62 @@ public class ProductRepository : IProductRepository
         }
     }
 
+    public async Task<Product> GetDetailsByUserAsync(Guid productId, Guid accountId)
+    {
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            // Query products and their images
+            var productData = new Dictionary<Guid, Product>();
+
+            await connection.QueryAsync<Product, ImageOfProduct, OrderDetails, Order, Book, Product>(
+                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
+                iop.ImageUrl, iop.ImageId, iop.CreatedDate AS ImageCreatedDate,
+                od.Id, od.CreatedDate AS OrderDetailsCreatedDate,
+                o.Id, o.CreatedDate AS OrderCreatedDate,
+                b.Id, b.Name, b.ImageUrl, b.GradeLevel, b.Category
+                FROM Products p
+                LEFT JOIN ImageOfProducts iop ON p.Id = iop.ProductId
+                LEFT JOIN OrderDetails od ON p.Id = od.ProductId
+                JOIN Orders o ON o.Id = od.OrderId
+                JOIN Books b ON b.Id = p.BookId
+                WHERE p.Id = @Id",
+                (product, productImage, orderDetails, order, book) =>
+                {
+                    if (!productData.TryGetValue(product.Id, out var existingProduct))
+                    {
+                        // If this product is not yet added, create it
+                        existingProduct = product;
+                        existingProduct.UpdateImageOfProducts(new List<ImageOfProduct>());
+                        existingProduct.UpdateOrderDetails(new List<OrderDetails>());
+                        productData.Add(existingProduct.Id, existingProduct);
+                    }
+
+                    // Add images to the product object
+                    if (productImage != null && !existingProduct.ImageOfProducts.Any(img => img.ImageId == productImage.ImageId))
+                    {
+                        existingProduct.ImageOfProducts.Add(productImage);
+                    }
+                    // Add orderDetails to the product object
+                    if (orderDetails != null && !existingProduct.OrderDetails.Any(od => od.Id == orderDetails.Id))
+                    {
+                        //if (order.AccountId == accountId)
+                        //{
+                            orderDetails.UpdateOrder(order);
+                            existingProduct.OrderDetails.Add(orderDetails);
+                        //}
+
+                    }
+                    existingProduct.UpdateBook(book);
+                    return existingProduct;
+                },
+                new { Id = productId },
+                splitOn: "ProductModifiedDate, ImageCreatedDate, OrderDetailsCreatedDate, OrderCreatedDate");
+
+            return productData.Values.ToList()[0];
+        }
+    }
+
     public async Task<PagedResult<Product>> GetPagedAsync(int pageIndex, int pageSize, Filter.ProductFilter filterParams, string[] selectedColumns)
     {
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
@@ -524,6 +580,18 @@ public class ProductRepository : IProductRepository
             return new PagedResult<Product>(items, pageIndex, pageSize, totalCount, totalPages);
         }
     }
+
+    public async Task<bool> IsProductPurchasedByUserAsync(Guid productId, Guid accountId)
+    {
+    
+        var sql = "SELECT CASE WHEN EXISTS (SELECT 1 FROM Products p JOIN OrderDetails od ON p.Id = od.ProductId JOIN Orders o ON o.Id = od.OrderId WHERE p.Id = @Id AND o.AccountId = @AccountId) THEN 1 ELSE 0 END";
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            var result = await connection.ExecuteScalarAsync<bool>(sql, new { Id = productId, AccountId = accountId });
+            return result;
+        }
+    }    
 
     public Task<int> UpdateAsync(Product entity)
     {

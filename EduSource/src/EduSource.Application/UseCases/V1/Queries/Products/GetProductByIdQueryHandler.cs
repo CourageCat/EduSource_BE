@@ -33,6 +33,6 @@ public sealed class GetProductByIdQueryHandler : IQueryHandler<Query.GetProductB
             ImageUrl = productFound.Book.ImageUrl,
             GradeLevel = productFound.Book.GradeLevel,
         }, false);
-        return Result.Success(new Success<ProductResponse>(MessagesList.ProductGetDetailsProductsSuccess.GetMessage().Code, MessagesList.ProductGetDetailsProductsSuccess.GetMessage().Message, result));
+        return Result.Success(new Success<ProductResponse>(MessagesList.ProductGetDetailsProductSuccess.GetMessage().Code, MessagesList.ProductGetDetailsProductSuccess.GetMessage().Message, result));
     }
 }

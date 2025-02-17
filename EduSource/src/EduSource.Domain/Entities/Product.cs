@@ -77,6 +77,11 @@ public class Product : DomainEntity<Guid>
         ImageOfProducts = imageOfProducts;
     }
 
+    public void UpdateOrderDetails(List<OrderDetails> orderDetails)
+    {
+        OrderDetails = orderDetails;
+    }
+
     public static Product CreateProduct(string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
     {
         return new Product()

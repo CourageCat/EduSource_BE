@@ -48,18 +48,19 @@ public class ProductController : ApiController
         return Ok(result);
     }
 
-    //[Authorize(Policy = "MemberPolicy")]
-    //[HttpGet("get_product_by_id_by_user", Name = "GetProductByIdByUser")]
-    //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
-    //[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
-    //public async Task<IActionResult> GetProductByIdByUser([FromQuery] Query.GetProductByIdQuery Queries)
-    //{
-    //    var result = await Sender.Send(Queries);
-    //    if (result.IsFailure)
-    //        return HandlerFailure(result);
+    [Authorize(Policy = "MemberPolicy")]
+    [HttpGet("get_product_by_id_by_user", Name = "GetProductByIdByUser")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> GetProductByIdByUser([FromQuery] Guid Id)
+    {
+        var userId = Guid.Parse(User.FindFirstValue("UserId"));
+        var result = await Sender.Send(new Query.GetProductByIdByUserQuery(Id, userId));
+        if (result.IsFailure)
+            return HandlerFailure(result);
 
-    //    return Ok(result);
-    //}
+        return Ok(result);
+    }
 
     [Authorize(Policy = "StaffPolicy")]
     [HttpPost("create_product", Name = "CreateProduct")]

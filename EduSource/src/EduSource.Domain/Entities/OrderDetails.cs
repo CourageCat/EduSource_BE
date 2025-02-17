@@ -26,4 +26,9 @@ public class OrderDetails : DomainEntity<Guid>
             ProductId = productId
         };
     }
+
+    public void UpdateOrder(Order order)
+    {
+        Order = order;
+    }
 }

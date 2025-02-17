@@ -172,7 +172,7 @@ public class Account : DomainEntity<Guid>
     public static Account CreateStaffAssistant
       (Guid id, string email, string password)
     {
-        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1737386425/edusource/staff-avatar.pngg";
+        string avatarUrl = "https://res.cloudinary.com/dc4eascme/image/upload/v1737386425/edusource/staff-avatar.png";
         return new Account(id, "Staff", "", email, "", false, password, GenderType.Male, avatarUrl, "", avatarUrl, "", LoginType.Local, RoleType.Staff);
     }
 
