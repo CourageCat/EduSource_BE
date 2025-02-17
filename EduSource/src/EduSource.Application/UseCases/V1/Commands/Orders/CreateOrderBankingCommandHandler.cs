@@ -31,7 +31,7 @@ public sealed class CreateOrderBankingCommandHandler : ICommandHandler<Command.C
     {
         //CreateOrderBankingCommandHandler
         var accountFound = await _efUnitOfWork.AccountRepository.FindByIdAsync(request.AccountId) ?? throw new AccountException.AccountNotFoundException();
-        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckout(request.AccountId);
+        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckoutAsync(request.AccountId);
         if (productsInCart.ToList().Count == 0)
         {
             throw new CartException.CheckoutWithNoProductsInCartException();

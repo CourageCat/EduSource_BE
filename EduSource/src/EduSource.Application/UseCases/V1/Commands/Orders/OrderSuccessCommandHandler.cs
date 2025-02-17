@@ -42,7 +42,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         var account = await _efUnitOfWork.AccountRepository.FindByIdAsync(orderObject.AccountId) ?? throw new AccountException.AccountNotFoundException();
 
         // Find Products in User's Cart
-        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckout(orderObject.AccountId);
+        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckoutAsync(orderObject.AccountId);
         if (productsInCart.ToList().Count == 0)
         {
             throw new CartException.CheckoutWithNoProductsInCartException();

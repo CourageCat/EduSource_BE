@@ -110,6 +110,9 @@ public enum MessagesList
     [Message("All Products: ", "product_noti_success_01")]
     ProductGetAllProductsSuccess,
 
+    [Message("All Products Purchased: ", "product_noti_success_02")]
+    ProductGetAllProductsPurchasedSuccess,
+
     [Message("Details of Product: ", "product_noti_success_02")]
     ProductGetDetailsProductsSuccess,
 

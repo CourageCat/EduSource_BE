@@ -27,6 +27,23 @@ namespace EduSource.Contract.DTOs.ProductDTOs
             public Guid? BookId { get; set; }
         }
 
+        public sealed class GetAllProductPurchasedRequestDTO
+        {
+            public string? Name { get; set; }
+            public double? Price { get; set; }
+            public CategoryType? Category { get; set; }
+            public string? Description { get; set; }
+            public ContentType? ContentType { get; set; }
+            public int? Unit { get; set; }
+            public UploadType? UploadType { get; set; }
+            public int? TotalPage { get; set; }
+            public double? Size { get; set; }
+            public double? Rating { get; set; }
+            public bool? IsPublic { get; set; }
+            public bool? IsApproved { get; set; }
+            public Guid? BookId { get; set; }
+        }
+
         public sealed class CreateProductRequestDTO
         {
             public string Name { get; set; }

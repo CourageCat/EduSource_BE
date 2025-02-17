@@ -30,7 +30,7 @@ public static class SeedData
         Guid GlobalSuccess5 = Guid.NewGuid();
         int numberOfProducts = 1;
         List<Guid> listProduct = new List<Guid>();
-        for(int i = 0; i < numberOfProducts; i++)
+        for (int i = 0; i < numberOfProducts; i++)
         {
             listProduct.Add(Guid.NewGuid());
         }
@@ -66,7 +66,7 @@ public static class SeedData
         if (!context.Books.Any())
         {
             context.Books.AddRange(
-                Book.CreateBookForSeedData(ILearnSmartStart1,"I Learn Smart Start 1", "I-Learn-Smart-Start-1", "https://res.cloudinary.com/dc4eascme/image/upload/v1736586096/edusource/I-Learn-Smart-Start-1.jpg", 1, Contract.Enumarations.Book.CategoryType.ILearnSmartStart), 
+                Book.CreateBookForSeedData(ILearnSmartStart1, "I Learn Smart Start 1", "I-Learn-Smart-Start-1", "https://res.cloudinary.com/dc4eascme/image/upload/v1736586096/edusource/I-Learn-Smart-Start-1.jpg", 1, Contract.Enumarations.Book.CategoryType.ILearnSmartStart),
                 Book.CreateBookForSeedData(ILearnSmartStart2, "I Learn Smart Start 2", "I-Learn-Smart-Start-2", "https://res.cloudinary.com/dc4eascme/image/upload/v1736583438/edusource/I-Learn-Smart-Start-2.jpg", 2, Contract.Enumarations.Book.CategoryType.ILearnSmartStart),
                 Book.CreateBookForSeedData(ILearnSmartStart3, "I Learn Smart Start 3", "I-Learn-Smart-Start-3", "https://res.cloudinary.com/dc4eascme/image/upload/v1736583439/edusource/I-Learn-Smart-Start-3.png", 3, Contract.Enumarations.Book.CategoryType.ILearnSmartStart),
                 Book.CreateBookForSeedData(ILearnSmartStart4, "I Learn Smart Start 4", "I-Learn-Smart-Start-4", "https://res.cloudinary.com/dc4eascme/image/upload/v1736583438/edusource/I-Learn-Smart-Start-4.jpg", 4, Contract.Enumarations.Book.CategoryType.ILearnSmartStart),
@@ -92,8 +92,16 @@ public static class SeedData
         {
             context.ImageOfProducts.AddRange(
                 ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-01-20_230706_g3dkld", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389331/edusource/Screenshot_2025-01-20_230706_g3dkld.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-01-20_230741_ev2yle", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389333/edusource/Screenshot_2025-01-20_230741_ev2yle.png", listProduct[0]),
                 ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-01-20_230822_fwv2x0", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389331/edusource/Screenshot_2025-01-20_230822_fwv2x0.png", listProduct[0]),
-                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-01-20_230741_ev2yle", "https://res.cloudinary.com/dc4eascme/image/upload/v1737389333/edusource/Screenshot_2025-01-20_230741_ev2yle.png", listProduct[0]));
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110346_rklbky", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765060/Screenshot_2025-02-17_110346_rklbky.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110441_fhkrlc", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765122/Screenshot_2025-02-17_110441_fhkrlc.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110623_xlpf5z", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765207/Screenshot_2025-02-17_110623_xlpf5z.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110709_dtdkcs", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765248/Screenshot_2025-02-17_110709_dtdkcs.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110739_x0arl3", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765400/Screenshot_2025-02-17_110739_x0arl3.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110825_htpwnx", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765401/Screenshot_2025-02-17_110825_htpwnx.png", listProduct[0]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-02-17_110925_k7btcv", "https://res.cloudinary.com/dc4eascme/image/upload/v1739765401/Screenshot_2025-02-17_110925_k7btcv.png", listProduct[0]));
+
         }
         context.SaveChanges();
     }

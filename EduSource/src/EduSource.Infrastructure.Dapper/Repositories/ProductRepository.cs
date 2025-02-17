@@ -231,7 +231,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task<PagedResult<Product>> GetProductsInCart(int pageIndex, int pageSize, Filter.ProductFilter filterParams, string[] selectedColumns)
+    public async Task<PagedResult<Product>> GetProductsInCartAsync(int pageIndex, int pageSize, Filter.ProductFilter filterParams, string[] selectedColumns)
     {
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
@@ -364,7 +364,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task<IEnumerable<Product>> GetProductsInCartToCheckout(Guid accountId)
+    public async Task<IEnumerable<Product>> GetProductsInCartToCheckoutAsync(Guid accountId)
     {
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
@@ -384,9 +384,144 @@ public class ProductRepository : IProductRepository
 
             parameters.Add("AccountId", $"{accountId}");
 
-            var items = (await connection.QueryAsync<Product>(queryBuilder.ToString(),  parameters)).ToList();
+            var items = (await connection.QueryAsync<Product>(queryBuilder.ToString(), parameters)).ToList();
 
             return items;
+        }
+    }
+
+    public async Task<PagedResult<Product>> GetProductsPurchasedAsync(int pageIndex, int pageSize, Filter.ProductFilter filterParams, string[] selectedColumns)
+    {
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            // Valid columns for selecting
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+            var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
+
+            // If no selected columns, select all
+            var selectedColumnsString = columns?.Length > 0 ? string.Join(", ", columns) : string.Join(", ", validColumns); ;
+
+            // Start building the query
+            var queryBuilder = new StringBuilder(
+                $@"SELECT {selectedColumnsString} FROM Products p 
+                JOIN OrderDetails od ON p.Id = od.ProductId
+                JOIN Orders o ON o.Id = od.OrderId                
+                WHERE 1=1 AND p.IsDeleted = 0 AND o.AccountId = @AccountId");
+
+            var parameters = new DynamicParameters();
+
+            pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+            pageSize = pageSize <= 0 ? 10 : pageSize > 100 ? 100 : pageSize;
+
+            var totalCountQuery = new StringBuilder($@"
+                SELECT COUNT(1) 
+                FROM Products p
+                JOIN OrderDetails od ON p.Id = od.ProductId
+                JOIN Orders o ON o.Id = od.OrderId
+                WHERE 1=1 AND p.IsDeleted = 0 AND o.AccountId = @AccountId");
+
+            parameters.Add("AccountId", $"{filterParams.UserId}");
+
+            // Filter by Name
+            if (!string.IsNullOrEmpty(filterParams?.Name))
+            {
+                queryBuilder.Append(" AND Name LIKE @Name");
+                totalCountQuery.Append(" AND Name LIKE @Name");
+                parameters.Add("Name", $"%{filterParams.Name}%");
+            }
+
+            //Filter by Price
+            if (filterParams?.Price.HasValue == true)
+            {
+                queryBuilder.Append(" AND Price = @Price");
+                totalCountQuery.Append(" AND Price = @Price");
+                parameters.Add("Price", $"{filterParams.Price}");
+            }
+
+            //Filter by Category
+            if (filterParams?.Category.HasValue == true)
+            {
+                queryBuilder.Append(" AND Category = @Category");
+                totalCountQuery.Append(" AND Category = @Category");
+                parameters.Add("Category", $"{(int)filterParams.Category}");
+            }
+
+            //Filter by Description
+            if (!string.IsNullOrEmpty(filterParams?.Description))
+            {
+                queryBuilder.Append(" AND Description LIKE @Description");
+                totalCountQuery.Append(" AND Description LIKE @Description");
+                parameters.Add("Description", $"%{filterParams.Description}%");
+            }
+
+            //Filter by ContentType
+            if (filterParams?.ContentType.HasValue == true)
+            {
+                queryBuilder.Append(" AND ContentType = @ContentType");
+                totalCountQuery.Append(" AND ContentType = @ContentType");
+                parameters.Add("ContentType", $"{(int)filterParams.ContentType}");
+            }
+
+            //Filter by Unit
+            if (filterParams?.Unit.HasValue == true)
+            {
+                queryBuilder.Append(" AND Unit = @Unit");
+                totalCountQuery.Append(" AND Unit = @Unit");
+                parameters.Add("Unit", $"{filterParams.Unit}");
+            }
+
+            //Filter by UploadType
+            if (filterParams?.UploadType.HasValue == true)
+            {
+                queryBuilder.Append(" AND UploadType = @UploadType");
+                totalCountQuery.Append(" AND UploadType = @UploadType");
+                parameters.Add("UploadType", $"{(int)filterParams.UploadType}");
+            }
+
+            //Filter by TotalPage
+            if (filterParams?.TotalPage.HasValue == true)
+            {
+                queryBuilder.Append(" AND TotalPage = @TotalPage");
+                totalCountQuery.Append(" AND TotalPage = @TotalPage");
+                parameters.Add("TotalPage", $"{filterParams.TotalPage}");
+            }
+
+            //Filter by Size
+            if (filterParams?.Size.HasValue == true)
+            {
+                queryBuilder.Append(" AND Size = @Size");
+                totalCountQuery.Append(" AND Size = @Size");
+                parameters.Add("Size", $"{filterParams.Size}");
+            }
+
+            //Filter by Rating
+            if (filterParams?.Rating.HasValue == true)
+            {
+                queryBuilder.Append(" AND Rating = @Rating");
+                totalCountQuery.Append(" AND Rating = @Rating");
+                parameters.Add("Rating", $"{filterParams.Rating}");
+            }
+
+            //Filter by BookId
+            if (filterParams?.BookId.HasValue == true)
+            {
+                queryBuilder.Append(" AND BookId = @BookId");
+                totalCountQuery.Append(" AND BookId = @BookId");
+                parameters.Add("BookId", $"{filterParams.BookId}");
+            }
+
+            //Count TotalCount
+            var totalCount = await connection.ExecuteScalarAsync<int>(totalCountQuery.ToString(), parameters);
+
+            //Count TotalPages
+            var totalPages = Math.Ceiling((totalCount / (double)pageSize));
+
+            var offset = (pageIndex - 1) * pageSize;
+            var paginatedQuery = $"{queryBuilder} ORDER BY p.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+
+            var items = (await connection.QueryAsync<Product>(paginatedQuery, parameters)).ToList();
+
+            return new PagedResult<Product>(items, pageIndex, pageSize, totalCount, totalPages);
         }
     }
 
