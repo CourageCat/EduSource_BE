@@ -52,7 +52,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         var sumOfOrder = productsInCart.Sum(p => p.Price);
         // Create Order
         var orderId = Guid.NewGuid();
-        var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.AccountId);
+        var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.Description, orderObject.AccountId);
         _efUnitOfWork.OrderRepository.Add(orderCreated);
         // Create OrderDetails for Product of order
         var listOrderDetails = new List<OrderDetails>();
