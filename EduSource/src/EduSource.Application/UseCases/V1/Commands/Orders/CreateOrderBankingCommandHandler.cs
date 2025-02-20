@@ -47,8 +47,9 @@ public sealed class CreateOrderBankingCommandHandler : ICommandHandler<Command.C
         });
         var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
         var result = await _paymentService.CreatePaymentLink(createPaymentDto);
+        var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId);
         // Save memory to when success or fail will know value
-        await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", request, TimeSpan.FromMinutes(60));
+        await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
         
         return Result.Success(new Success<CreatePaymentResponseDTO>("", "", result));
     }

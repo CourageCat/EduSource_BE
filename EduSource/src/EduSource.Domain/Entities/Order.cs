@@ -10,16 +10,18 @@ public class Order : DomainEntity<Guid>
     }
 
     public double TotalPrice { get; private set; }
+    public long OrderCode { get; private set; }
     public Guid AccountId { get; private set; }
     public virtual Account Account { get; private set; }
     public virtual ICollection<OrderDetails> OrderDetails { get; private set; }
 
-    public static Order CreateOrder(Guid id, double totalPrice, Guid accountId)
+    public static Order CreateOrder(Guid id, double totalPrice, long orderCode, Guid accountId)
     {
         return new Order()
         {
             Id = id,
             TotalPrice = totalPrice,
+            OrderCode = orderCode,
             AccountId = accountId
         };
     }

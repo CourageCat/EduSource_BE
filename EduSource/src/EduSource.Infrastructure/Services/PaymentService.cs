@@ -29,7 +29,7 @@ public class PaymentService : IPaymentService
 
             CreatePaymentResult createPaymentResult = await _payOS.createPaymentLink(data);
 
-            var responseDTO = new CreatePaymentResponseDTO(true, createPaymentResult.checkoutUrl, "Success");
+            var responseDTO = new CreatePaymentResponseDTO(createPaymentResult.orderCode, true, createPaymentResult.checkoutUrl, "Success");
 
             return responseDTO;
         }

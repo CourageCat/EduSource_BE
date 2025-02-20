@@ -2,6 +2,7 @@
 using EduSource.Contract.Abstractions.Services;
 using EduSource.Contract.Abstractions.Shared;
 using EduSource.Contract.DTOs.OrderDTOs;
+using EduSource.Contract.DTOs.PaymentDTOs;
 using EduSource.Contract.Services.Orders;
 using EduSource.Contract.Settings;
 using EduSource.Domain.Abstraction.Dappers;
@@ -35,7 +36,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         // Get infomation saved in memory
         var orderMemory = await _responseCacheService.GetCacheResponseAsync($"order_{request.OrderId}");
         // Conver JSON to object
-        var orderObject = JsonConvert.DeserializeObject<Command.CreateOrderBankingCommand>(orderMemory);
+        var orderObject = JsonConvert.DeserializeObject<ResultCacheDTO>(orderMemory);
 
 
         // Find User
@@ -51,7 +52,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         var sumOfOrder = productsInCart.Sum(p => p.Price);
         // Create Order
         var orderId = Guid.NewGuid();
-        var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.AccountId);
+        var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.AccountId);
         _efUnitOfWork.OrderRepository.Add(orderCreated);
         // Create OrderDetails for Product of order
         var listOrderDetails = new List<OrderDetails>();
@@ -80,7 +81,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         });
         // Send success order email and invoice for User
         await Task.WhenAll(
-           _publisher.Publish(new DomainEvent.NotiUserOrderSuccess(orderCreated.Id, account.Email, orderId.ToString(), DateTime.UtcNow.ToString(), invoiceItems, sumOfOrder), cancellationToken)
+           _publisher.Publish(new DomainEvent.NotiUserOrderSuccess(orderCreated.Id, account.Email, orderObject.OrderCode.ToString(), DateTime.UtcNow.ToString(), invoiceItems, sumOfOrder), cancellationToken)
         );
         var result = new Response.OrderSuccess($"{_clientSetting.Url}{_clientSetting.OrderSuccess}");
         return Result.Success(new Success<Response.OrderSuccess>("", "", result));
