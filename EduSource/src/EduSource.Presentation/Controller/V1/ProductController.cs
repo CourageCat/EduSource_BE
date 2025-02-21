@@ -36,6 +36,25 @@ public class ProductController : ApiController
         return Ok(result);
     }
 
+    [Authorize (Policy = "MemberPolicy")]
+    [HttpGet("get_all_products_by_user", Name = "GetAllProductsByUser")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> GetAllProductsByUser([FromQuery] GetAllProductRequestDTO request,
+    [FromQuery] int pageIndex = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string[] selectedColumns = null)
+    {
+        var userId = Guid.Parse(User.FindFirstValue("UserId"));
+        var filterParams = new ProductFilter(request.Name, request.Price, request.Category, request.Description, request.ContentType, request.Unit, request.UploadType, request.TotalPage, request.Size, request.Rating, request.IsPublic, request.IsApproved, null, request.BookId, userId);
+
+        var result = await Sender.Send(new Query.GetAllProductsByUserQuery(pageIndex, pageSize, filterParams, selectedColumns));
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Ok(result);
+    }
+
     [HttpGet("get_product_by_id", Name = "GetProductById")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]

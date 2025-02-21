@@ -6,4 +6,5 @@ namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 
 public interface IOrderRepository : IGenericRepository<Order>
 {
+    Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid AccountId);
 }

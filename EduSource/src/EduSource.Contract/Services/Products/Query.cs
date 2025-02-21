@@ -12,6 +12,11 @@ public static class Query
             ProductFilter FilterParams,
             string[] SelectedColumns) : IQuery<Success<PagedResult<ProductResponse>>>;
 
+    public record GetAllProductsByUserQuery(int PageIndex,
+            int PageSize,
+            ProductFilter FilterParams,
+            string[] SelectedColumns) : IQuery<Success<PagedResult<ProductResponse>>>;
+
     public record GetAllProductsPurchasedQuery(int PageIndex,
             int PageSize,
             ProductFilter FilterParams,

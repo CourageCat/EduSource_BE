@@ -23,7 +23,8 @@ public class OrderDetails : DomainEntity<Guid>
         {
             Quantity = quantity,
             OrderId = orderId,
-            ProductId = productId
+            ProductId = productId,
+            IsDeleted = false
         };
     }
 

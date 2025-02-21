@@ -9,6 +9,7 @@ namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 public interface IProductRepository : IGenericRepository<Product>
 {
     Task<PagedResult<Product>> GetPagedAsync(int pageIndex, int pageSize, ProductFilter filterParams, string[] selectedColumns);
+    Task<PagedResult<Product>> GetPagedByUserAsync(int pageIndex, int pageSize, ProductFilter filterParams, string[] selectedColumns);
 
     Task<PagedResult<Product>> GetProductsInCartAsync(int pageIndex, int pageSize, ProductFilter filterParams, string[] selectedColumns);
 
