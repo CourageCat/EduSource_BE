@@ -146,4 +146,10 @@ public enum MessagesList
     [Message("All Products in cart: ", "cart_noti_success_03")]
     CartGetAllProductsFromCartSuccess,
 
+    [Message("Can not find any orders!", "order_noti_exception_01")]
+    OrdersNotFoundException,
+
+    [Message("All Orders: ", "order_noti_success_01")]
+    OrderGetAllOrdersSuccess,
+
 }

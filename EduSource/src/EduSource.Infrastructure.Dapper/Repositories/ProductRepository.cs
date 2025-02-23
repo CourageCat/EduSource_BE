@@ -407,9 +407,9 @@ public class ProductRepository : IProductRepository
             {
                 queryBuilder.Append(" AND AccountId = @StaffId");
                 parameters.Add("StaffId", $"{filterParams.StaffId}");
-            }            
+            }
 
-            // Query products and their images
+            // Query products and their orders
             var productData = new Dictionary<Guid, Product>();
 
             await connection.QueryAsync<Product, OrderDetails, Product>(

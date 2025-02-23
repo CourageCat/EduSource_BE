@@ -1,6 +1,8 @@
-﻿//namespace EduSource.Contract.Services.Orders;
+﻿using EduSource.Contract.Enumarations.Order;
 
-//public static class Filter
-//{
-//    public record OrderFilter(SortType? SortType, bool? IsSortASC, double? MinValue, double? MaxValue, string? DeliveryAddress, OrderStatusType? OrderStatus, OrderReportStatusType? OrderReportStatus, Guid? AccountUserId, Guid? AccountLessorId);
-//}
+namespace EduSource.Contract.Services.Orders;
+
+public static class Filter
+{
+    public record OrderFilter(SortType? SortType, bool? IsSortASC, int? MinValue, int? MaxValue, string? Description, Guid? AccountId);
+}

@@ -1,11 +1,15 @@
-﻿//namespace EduSource.Contract.Services.Orders;
+﻿using EduSource.Contract.Abstractions.Message;
+using EduSource.Contract.Abstractions.Shared;
+using static EduSource.Contract.Services.Orders.Filter;
 
-//public static class Query
-//{
-//    public record GetAllOrdersQuery(int PageIndex,
-//        int PageSize,
-//        OrderFilter FilterParams,
-//        string[] SelectedColumns) : IQuery<Success<PagedResult<Response.OrderResponse>>>;
+namespace EduSource.Contract.Services.Orders;
 
-//    public record GetOrderByIdQuery(Guid Id) : IQuery<Success<Response.OrderResponse>>;
-//}
+public static class Query
+{
+    public record GetAllOrdersQuery(int PageIndex,
+        int PageSize,
+        OrderFilter FilterParams,
+        string[] SelectedColumns) : IQuery<Success<PagedResult<Response.OrderResponse>>>;
+
+    //public record GetOrderByIdQuery(Guid Id) : IQuery<Success<Response.OrderResponse>>;
+}

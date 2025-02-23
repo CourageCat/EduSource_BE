@@ -32,4 +32,9 @@ public class OrderDetails : DomainEntity<Guid>
     {
         Order = order;
     }
+
+    public void UpdateProduct(Product product)
+    {
+        Product = product;
+    }
 }

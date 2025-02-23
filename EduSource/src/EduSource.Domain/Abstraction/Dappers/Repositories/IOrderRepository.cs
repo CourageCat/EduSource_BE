@@ -1,10 +1,14 @@
-﻿using EduSource.Domain.Abstraction.Dappers.Repositories;
+﻿using EduSource.Contract.Abstractions.Shared;
+using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Abstraction.EntitiyFramework.Repositories;
 using EduSource.Domain.Entities;
+using static EduSource.Contract.Services.Orders.Filter;
 
 namespace EduSource.Domain.Abstraction.Dappers.Repositories;
 
 public interface IOrderRepository : IGenericRepository<Order>
 {
     Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid AccountId);
+    Task<PagedResult<Order>> GetAllOrdersByAdminAsync(int pageIndex, int pageSize, OrderFilter filterParams, string[] selectedColumns);
+
 }
