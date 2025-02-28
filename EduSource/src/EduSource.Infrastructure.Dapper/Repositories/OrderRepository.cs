@@ -25,6 +25,17 @@ public class OrderRepository : IOrderRepository
         throw new NotImplementedException();
     }
 
+    public async Task<int> CountAllOrders()
+    {
+        var sql = "SELECT COUNT(*) FROM Orders";
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            var result = await connection.ExecuteScalarAsync<int>(sql);
+            return result;
+        }
+    }
+
     public Task<int> DeleteAsync(Order entity)
     {
         throw new NotImplementedException();
@@ -167,6 +178,70 @@ public class OrderRepository : IOrderRepository
     public Task<Order>? GetByIdAsync(Guid Id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Dictionary<DateTime, int>> GetRevenueInListDates(List<DateTime> dates)
+    {
+        var sql = @"
+        SELECT CAST(CreatedDate AS DATE) AS OrderDate, 
+        SUM(TotalPrice) AS TotalPrice
+        FROM Orders
+        WHERE CAST(CreatedDate AS DATE) IN @Dates
+        GROUP BY CAST(CreatedDate AS DATE);";
+
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+
+            // Query existing total prices from the database
+            var dbResults = await connection.QueryAsync<(DateTime OrderDate, int TotalPrice)>(
+                sql, new { Dates = dates.Select(d => d.Date).ToList() }
+            );
+
+            // Convert results to a dictionary
+            var resultDict = dbResults.ToDictionary(x => x.OrderDate, x => x.TotalPrice);
+
+            // Ensure all requested dates are in the dictionary, default to 0 if missing
+            foreach (var date in dates.Select(d => d.Date))
+            {
+                if (!resultDict.ContainsKey(date))
+                {
+                    resultDict[date] = 0; // Set missing dates to 0
+                }
+            }
+            //Sort and return result
+            return resultDict.ToList().OrderBy(x => x.Key).ToDictionary();
+        }
+
+    }
+
+    public async Task<int> GetTotalMoneyOfOrdersInDay(DateTime date)
+    {
+        var sql = "SELECT SUM(TotalPrice) FROM Orders WHERE CAST(CreatedDate AS DATE) = @Date";
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            var result = await connection.ExecuteScalarAsync<int>(sql, new
+            {
+                date.Date
+            });
+            return result;
+        }
+    }
+
+    public async Task<int> GetTotalMoneyOfOrdersInMonth(int month, int year)
+    {
+        var sql = "SELECT SUM(TotalPrice) FROM Orders WHERE MONTH(CreatedDate) = @Month AND YEAR(CreatedDate) = @Year";
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+            var result = await connection.ExecuteScalarAsync<int>(sql, new
+            {
+                Month = month,
+                Year = year
+            });
+            return result;
+        }
     }
 
     public Task<int> UpdateAsync(Order entity)

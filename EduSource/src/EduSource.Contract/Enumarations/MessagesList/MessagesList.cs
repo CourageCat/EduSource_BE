@@ -152,4 +152,7 @@ public enum MessagesList
     [Message("All Orders: ", "order_noti_success_01")]
     OrderGetAllOrdersSuccess,
 
+    [Message("Dashboard Response: ", "order_noti_success_02")]
+    OrderGetDashboardSuccess,
+
 }

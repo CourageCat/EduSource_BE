@@ -34,7 +34,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<int> CountAllUsers()
     {
-        var sql = "SELECT COUNT(*) FROM Accounts WHERE RoleUserId = 2";
+        var sql = "SELECT COUNT(*) FROM Accounts WHERE RoleId = 2";
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             await connection.OpenAsync();

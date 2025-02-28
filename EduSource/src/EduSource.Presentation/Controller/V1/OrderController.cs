@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static EduSource.Contract.DTOs.OrderDTOs.GetAllOrdersDTO;
 using static EduSource.Contract.Services.Orders.Filter;
+using static EduSource.Contract.Services.Orders.Query;
 using static EduSource.Contract.Services.Products.Filter;
 
 namespace EduSource.Presentation.Controller.V1;
@@ -69,6 +70,19 @@ public class OrderController : ApiController
         var filterParams = new OrderFilter(request.SortType, request.IsSortASC, request.MinValue, request.MaxValue, request.Description, null);
 
         var result = await Sender.Send(new Query.GetAllOrdersQuery(pageIndex, pageSize, filterParams, selectedColumns));
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Ok(result);
+    }
+
+    [Authorize (Policy = "AdminPolicy")]
+    [HttpGet("get_dash_board", Name = "GetDashboards")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> GetDashboards([FromQuery] GetDashboardQuery request)
+    {
+        var result = await Sender.Send(request);
         if (result.IsFailure)
             return HandlerFailure(result);
 

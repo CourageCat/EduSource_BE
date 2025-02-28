@@ -10,5 +10,10 @@ public interface IOrderRepository : IGenericRepository<Order>
 {
     Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid AccountId);
     Task<PagedResult<Order>> GetAllOrdersByAdminAsync(int pageIndex, int pageSize, OrderFilter filterParams, string[] selectedColumns);
+    Task<int> CountAllOrders();
+    Task<int> GetTotalMoneyOfOrdersInMonth(int month, int year);
+    Task<int> GetTotalMoneyOfOrdersInDay(DateTime date);
+
+    Task<Dictionary<DateTime, int>> GetRevenueInListDates(List<DateTime> dates);
 
 }
