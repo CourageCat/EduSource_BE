@@ -14,6 +14,8 @@ public interface IOrderRepository : IGenericRepository<Order>
     Task<int> GetTotalMoneyOfOrdersInMonth(int month, int year);
     Task<int> GetTotalMoneyOfOrdersInDay(DateTime date);
 
-    Task<Dictionary<DateTime, int>> GetRevenueInListDates(List<DateTime> dates);
+    Task<Dictionary<DateTime, (int TotalPrice, int OrdersCount)>> GetRevenueInListDates(List<DateTime> dates);
+    Task<Dictionary<int, (int TotalPrice, int OrdersCount)>> GetRevenueInMonth(int year, int month);
+    Task<Dictionary<DateTime, (int TotalPrice, int OrdersCount)>> GetRevenueInYear(int year);
 
 }

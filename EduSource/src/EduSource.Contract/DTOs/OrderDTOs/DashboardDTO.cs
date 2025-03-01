@@ -4,14 +4,9 @@ public static class DashboardDTO
 {
     public class DataDTO
     {
-        public List<string> Categories { get; set; }
-        public List<SeriesDTO> Series { get; set; }
-    }
-    public class SeriesDTO
-    {
-
         public string Name { get; set; }
-        public List<int> Data { get; set; }
+        public int Sales {  get; set; }
+        public int Revenue { get; set; }
     }
 
     public class MonthlyTargetDTO
@@ -22,6 +17,6 @@ public static class DashboardDTO
         public int TodayRevenue { get; set; }
         public double GrowthPercentage { get; set; }
         public string Currency { get; set; }
-        public string Comparison { get; set; }
+        public int Comparison { get; set; }
     }
 }

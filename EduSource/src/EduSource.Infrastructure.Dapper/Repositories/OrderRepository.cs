@@ -4,8 +4,10 @@ using EduSource.Contract.Enumarations.Order;
 using EduSource.Domain.Abstraction.Dappers.Repositories;
 using EduSource.Domain.Entities;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
+using System.Globalization;
 using System.Text;
 using static EduSource.Contract.Services.Orders.Filter;
 using static EduSource.Contract.Services.Products.Filter;
@@ -180,11 +182,12 @@ public class OrderRepository : IOrderRepository
         throw new NotImplementedException();
     }
 
-    public async Task<Dictionary<DateTime, int>> GetRevenueInListDates(List<DateTime> dates)
+    public async Task<Dictionary<DateTime, (int TotalPrice, int OrdersCount)>> GetRevenueInListDates(List<DateTime> dates)
     {
         var sql = @"
         SELECT CAST(CreatedDate AS DATE) AS OrderDate, 
-        SUM(TotalPrice) AS TotalPrice
+        SUM(TotalPrice) AS TotalPrice,
+        Count(*) AS OrdersCount
         FROM Orders
         WHERE CAST(CreatedDate AS DATE) IN @Dates
         GROUP BY CAST(CreatedDate AS DATE);";
@@ -194,26 +197,106 @@ public class OrderRepository : IOrderRepository
             await connection.OpenAsync();
 
             // Query existing total prices from the database
-            var dbResults = await connection.QueryAsync<(DateTime OrderDate, int TotalPrice)>(
+            var dbResults = await connection.QueryAsync<(DateTime OrderDate, int TotalPrice, int OrdersCount)>(
                 sql, new { Dates = dates.Select(d => d.Date).ToList() }
             );
 
             // Convert results to a dictionary
-            var resultDict = dbResults.ToDictionary(x => x.OrderDate, x => x.TotalPrice);
+            var resultDict = dbResults.ToDictionary(x => x.OrderDate, x => (x.TotalPrice, x.OrdersCount));
 
             // Ensure all requested dates are in the dictionary, default to 0 if missing
             foreach (var date in dates.Select(d => d.Date))
             {
                 if (!resultDict.ContainsKey(date))
                 {
-                    resultDict[date] = 0; // Set missing dates to 0
+                    resultDict[date] = (0, 0); // Set missing dates to 0
                 }
             }
             //Sort and return result
             return resultDict.ToList().OrderBy(x => x.Key).ToDictionary();
         }
-
     }
+
+    public async Task<Dictionary<int, (int TotalPrice, int OrdersCount)>> GetRevenueInMonth(int year, int month)
+    {
+
+        var sql = @"
+            SELECT 
+                YEAR(CreatedDate) AS OrderYear,
+                MONTH(CreatedDate) AS OrderMonth,
+                (DATEDIFF(DAY, DATEADD(DAY, -DAY(CreatedDate) + 1, CreatedDate), CreatedDate) / 7) + 1 AS WeekOfMonth,
+                SUM(TotalPrice) AS TotalPrice,
+                COUNT(*) AS OrdersCount
+            FROM Orders
+            WHERE YEAR(CreatedDate) = @Year
+            AND MONTH(CreatedDate) = @Month
+            GROUP BY 
+                YEAR(CreatedDate),
+                MONTH(CreatedDate),
+                (DATEDIFF(DAY, DATEADD(DAY, -DAY(CreatedDate) + 1, CreatedDate), CreatedDate) / 7) + 1        
+            ORDER BY OrderYear, OrderMonth, WeekOfMonth;";
+
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+
+            var dbResults = await connection.QueryAsync<(int OrderYear, int OrderMonth, int WeekOfMonth, int TotalPrice, int OrdersCount)>(
+                sql, new { Year = year, Month = month }
+            );
+
+            // Convert results to a dictionary
+            var resultDict = dbResults.ToDictionary(x => x.WeekOfMonth, x => (x.TotalPrice, x.OrdersCount));
+
+            // Ensure all requested dates are in the dictionary, default to 0 if missing
+            for (int i = 0; i < 4; i++)
+            {
+                if (!resultDict.ContainsKey(i + 1))
+                {
+                    resultDict[i+1] = (0, 0); // Set missing dates to 0
+                }
+            }
+            //Sort and return result
+            return resultDict.ToList().OrderBy(x => x.Key).ToDictionary();
+        }
+    }
+
+    public async Task<Dictionary<DateTime, (int TotalPrice, int OrdersCount)>> GetRevenueInYear(int year)
+    {
+        var sql = @"
+    SELECT 
+        DATEFROMPARTS(YEAR(CreatedDate), MONTH(CreatedDate), 1) AS OrderDate, 
+        SUM(TotalPrice) AS TotalPrice,
+        COUNT(*) AS OrdersCount
+    FROM Orders
+    WHERE YEAR(CreatedDate) = @Year
+    GROUP BY YEAR(CreatedDate), MONTH(CreatedDate);";
+
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
+        {
+            await connection.OpenAsync();
+
+            // Query results
+            var dbResults = await connection.QueryAsync<(DateTime OrderDate, int TotalPrice, int OrdersCount)>(
+                sql, new { Year = year }
+            );
+
+            // Convert results to a dictionary
+            var resultDict = dbResults.ToDictionary(x => x.OrderDate, x => (x.TotalPrice, x.OrdersCount));
+
+            // Ensure all requested dates are in the dictionary, default to 0 if missing
+            for (int i = 0; i < 12; i++)
+            {
+                var date = new DateTime(year, i + 1, 1);
+                if (!resultDict.ContainsKey(date))
+                {
+                    resultDict[date] = (0, 0); // Set missing dates to 0
+                }
+            }
+            //Sort and return result
+            return resultDict.ToList().OrderBy(x => x.Key).ToDictionary();
+        }
+    }
+
 
     public async Task<int> GetTotalMoneyOfOrdersInDay(DateTime date)
     {

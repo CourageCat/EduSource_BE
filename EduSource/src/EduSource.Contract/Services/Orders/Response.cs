@@ -11,5 +11,5 @@ public static class Response
     public record OrderResponse(Guid Id, int TotalAmount, int PaymentAmount, DateTime PaidAt, string Description, long OrderCode, AccountResponseDTO Account, List<OrderDetailsResponseDTO> OrderDetails);
     //public record OrderResponse(Guid Id, DateTime RentTime, DateTime ReturnTime, string DeliveryAddress, double OrderValue, OrderStatusType OrderStatus, OrderReportStatusType OrderReportStatus, string? UserReasonReject, string? LessorReasonReject, string? UserReport, string? AdminReasonReject, DateTime CreatedDate, ProductResponseDTO Product, UserDTO User, LessorDTO Lessor);
 
-    public record DashboardResponse(DataDTO Data, MonthlyTargetDTO MonthlyTarget, int CustomersCount, int OrdersCount);
+    public record DashboardResponse(string Category, List<DataDTO> Data, MonthlyTargetDTO MonthlyTarget, int CustomersCount, int OrdersCount);
 }

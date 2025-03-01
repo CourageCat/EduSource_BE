@@ -11,7 +11,7 @@ public static class Query
         OrderFilter FilterParams,
         string[] SelectedColumns) : IQuery<Success<PagedResult<Response.OrderResponse>>>;
 
-    public record GetDashboardQuery(int month, int year, int week) : IQuery<Success<Response.DashboardResponse>>;
+    public record GetDashboardQuery(int year, int? month, int? week) : IQuery<Success<Response.DashboardResponse>>;
 
     //public record GetOrderByIdQuery(Guid Id) : IQuery<Success<Response.OrderResponse>>;
 }

@@ -22,7 +22,7 @@ public sealed class GetDashboardQueryHandler : IQueryHandler<Query.GetDashboardQ
     {
         var customersCount = await _dpUnitOfWork.AccountRepositories.CountAllUsers();
         var ordersCount = await _dpUnitOfWork.OrderRepositories.CountAllOrders();
-        var totalMoneyOfOrdersInMonth = await _dpUnitOfWork.OrderRepositories.GetTotalMoneyOfOrdersInMonth(request.month, request.year);
+        var totalMoneyOfOrdersInMonth = await _dpUnitOfWork.OrderRepositories.GetTotalMoneyOfOrdersInMonth(DateTime.Now.Month, DateTime.Now.Year);
         var totalMoneyOfOrdersToday = await _dpUnitOfWork.OrderRepositories.GetTotalMoneyOfOrdersInDay(DateTime.Now);
         double target = 6000000;
         double progress = Math.Round((totalMoneyOfOrdersInMonth / target * 100) * 100.0) / 100.0;
@@ -35,43 +35,73 @@ public sealed class GetDashboardQueryHandler : IQueryHandler<Query.GetDashboardQ
             TodayRevenue = totalMoneyOfOrdersToday,
             GrowthPercentage = growthPercentage,
             Currency = "VNĐ",
-            Comparison = "up"
+            Comparison = (int)(totalMoneyOfOrdersInMonth - target)
         };
-        List<DateTime> dates = new List<DateTime>();
-        int day = 1 + (request.week - 1) * 7;
-        for (int i = 0; i < 7; i++)
+        if (request.week.HasValue && request.month.HasValue)
         {
-            try
+            List<DateTime> dates = new List<DateTime>();
+            int day = 1 + (request.week.Value - 1) * 7;
+            for (int i = 0; i < 7; i++)
             {
-                var date = new DateTime(request.year, request.month, day + i);
-                dates.Add(date);
+                try
+                {
+                    var date = new DateTime(request.year, request.month.Value, day + i);
+                    dates.Add(date);
+                }
+                catch (Exception ex)
+                {
+                }
             }
-            catch (Exception ex)
+            var listRevenueInWeek = await _dpUnitOfWork.OrderRepositories.GetRevenueInListDates(dates);
+            var data = new List<DataDTO>();
+            listRevenueInWeek.ToList().ForEach(revenue =>
             {
-            }
+                var dataDTO = new DataDTO()
+                {
+                    Name = $"{revenue.Key.Day}/{revenue.Key.Month}/{revenue.Key.Year}",
+                    Revenue = revenue.Value.TotalPrice,
+                    Sales = revenue.Value.OrdersCount
+                };
+                data.Add(dataDTO);
+            });
+            var result = new Response.DashboardResponse("week", data, monthlyTarget, customersCount, ordersCount);
+            return Result.Success(new Success<Response.DashboardResponse>(MessagesList.OrderGetDashboardSuccess.GetMessage().Message, MessagesList.OrderGetDashboardSuccess.GetMessage().Code, result));
         }
-        var listRevenueInWeek = await _dpUnitOfWork.OrderRepositories.GetRevenueInListDates(dates);
-        var categories = new List<string>();
-        var series = new List<SeriesDTO>
+        else if (request.month.HasValue && !request.week.HasValue)
         {
-            new SeriesDTO
+            var listRevenueInWeek = await _dpUnitOfWork.OrderRepositories.GetRevenueInMonth(request.year, request.month.Value);
+            var data = new List<DataDTO>();
+            listRevenueInWeek.ToList().ForEach(revenue =>
             {
-                Name = "Revenue",
-                Data = listRevenueInWeek.Values.ToList(),
-            }
-        };
-        listRevenueInWeek.ToList().ForEach(revenue =>
+                var dataDTO = new DataDTO()
+                {
+                    Name = $"Week {revenue.Key}",
+                    Revenue = revenue.Value.TotalPrice,
+                    Sales = revenue.Value.OrdersCount
+                };
+                data.Add(dataDTO);
+            });
+            var result = new Response.DashboardResponse("week", data, monthlyTarget, customersCount, ordersCount);
+            return Result.Success(new Success<Response.DashboardResponse>(MessagesList.OrderGetDashboardSuccess.GetMessage().Message, MessagesList.OrderGetDashboardSuccess.GetMessage().Code, result));
+        }
+        else if (!request.week.HasValue && !request.week.HasValue)
         {
-            var category = $"{revenue.Key.Day}/{revenue.Key.Month}/{revenue.Key.Year}";
-            categories.Add(category);
-        });
-        var data = new DataDTO()
-        {
-            Categories = categories,
-            Series = series
-        };
-        var result = new Response.DashboardResponse(data, monthlyTarget, customersCount, ordersCount);
-
-        return Result.Success(new Success<Response.DashboardResponse>(MessagesList.OrderGetDashboardSuccess.GetMessage().Message, MessagesList.OrderGetDashboardSuccess.GetMessage().Code, result));
+            var listRevenueInWeek = await _dpUnitOfWork.OrderRepositories.GetRevenueInYear(request.year);
+            var data = new List<DataDTO>();
+            listRevenueInWeek.ToList().ForEach(revenue =>
+            {
+                string monthName = revenue.Key.ToString("MMMM");
+                var dataDTO = new DataDTO()
+                {
+                    Name = monthName,
+                    Revenue = revenue.Value.TotalPrice,
+                    Sales = revenue.Value.OrdersCount
+                };
+                data.Add(dataDTO);
+            });
+            var result = new Response.DashboardResponse("year", data, monthlyTarget, customersCount, ordersCount);
+            return Result.Success(new Success<Response.DashboardResponse>(MessagesList.OrderGetDashboardSuccess.GetMessage().Message, MessagesList.OrderGetDashboardSuccess.GetMessage().Code, result));
+        }
+        return Result.Success(new Success<Response.DashboardResponse>(MessagesList.OrderGetDashboardSuccess.GetMessage().Message, MessagesList.OrderGetDashboardSuccess.GetMessage().Code, null));
     }
 }
