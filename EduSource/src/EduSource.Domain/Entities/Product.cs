@@ -40,6 +40,34 @@ public class Product : DomainEntity<Guid>
 
     public static Product CreateProductForSeedData(Guid id, string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
     {
+        if (contentType == ContentType.Unit)
+        {
+            return new Product()
+            {
+                Id = id,
+                Name = name,
+                Price = price,
+                Category = category,
+                Description = description,
+                ContentType = contentType,
+                Unit = unit,
+                UploadType = uploadType,
+                TotalPage = totalPage,
+                Size = size,
+                ImageId = imageId,
+                ImageUrl = imageUrl,
+                FileId = fileId,
+                FileUrl = fileUrl,
+                Rating = 0,
+                IsPublic = true,
+                IsApproved = true,
+                BookId = bookId,
+                AccountId = accountId,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                IsDeleted = false
+            };
+        }
         return new Product()
         {
             Id = id,
@@ -48,7 +76,6 @@ public class Product : DomainEntity<Guid>
             Category = category,
             Description = description,
             ContentType = contentType,
-            Unit = unit,
             UploadType = uploadType,
             TotalPage = totalPage,
             Size = size,

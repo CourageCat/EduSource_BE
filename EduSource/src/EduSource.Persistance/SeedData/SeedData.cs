@@ -28,7 +28,7 @@ public static class SeedData
         Guid GlobalSuccess3Id = Guid.NewGuid();
         Guid GlobalSuccess4Id = Guid.NewGuid();
         Guid GlobalSuccess5Id = Guid.NewGuid();
-        int numberOfProducts = 4;
+        int numberOfProducts = 7;
         List<Guid> listProduct = new List<Guid>();
         for (int i = 0; i < numberOfProducts; i++)
         {
@@ -93,7 +93,13 @@ public static class SeedData
                 //I Learn Smart Start 3 - Unit 6 - Exercises
                 Product.CreateProductForSeedData(listProduct[2], "Unit 6: Classroom Items", 20000, Contract.Enumarations.Product.CategoryType.Exercise, "All Exercises for Unit 6: Classroom Items of I Learn Smart Start 3 Book", ContentType.Unit, 6, UploadType.Pdf, 5, 1.126, "476667624_3950096128644390_3722047459084752702_n_aedtao", "https://res.cloudinary.com/dc4eascme/image/upload/v1740070678/edusource/476667624_3950096128644390_3722047459084752702_n_aedtao.png", "I-Learn-Smart-Start-3-Unit-6-Exercise", "https://res.cloudinary.com/dc4eascme/image/upload/v1740070473/edusource/I-Learn-Smart-Start-3-Unit-6-Exercise.pdf", ILearnSmartStart3Id, staffId),
                 //I Learn Smart Start 3 - Unit 5 - Tests
-                Product.CreateProductForSeedData(listProduct[3], "Unit 5: Jobs and occupations", 17000, Contract.Enumarations.Product.CategoryType.Test, "All Tests for Unit 5: Jobs and occupations of I Learn Smart Start 3 Book", ContentType.Unit, 5, UploadType.Pdf, 3, 1.559, "476898424_516722711033057_8916288325621536975_n_fvn3ly", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071632/edusource/476898424_516722711033057_8916288325621536975_n_fvn3ly.png", "I-Learn-Smart-Start-3-Unit-5-Test", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071272/edusource/I-Learn-Smart-Start-3-Unit-5-Test.pdf", ILearnSmartStart3Id, staffId)
+                Product.CreateProductForSeedData(listProduct[3], "Unit 5: Jobs and occupations", 17000, Contract.Enumarations.Product.CategoryType.Test, "All Tests for Unit 5: Jobs and occupations of I Learn Smart Start 3 Book", ContentType.Unit, 5, UploadType.Pdf, 3, 1.559, "476898424_516722711033057_8916288325621536975_n_fvn3ly", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071632/edusource/476898424_516722711033057_8916288325621536975_n_fvn3ly.png", "I-Learn-Smart-Start-3-Unit-5-Test", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071272/edusource/I-Learn-Smart-Start-3-Unit-5-Test.pdf", ILearnSmartStart3Id, staffId),
+                //I Learn Smart Start 3 - Semester 1 - Tests
+                Product.CreateProductForSeedData(listProduct[4], "Semester 1", 30000, Contract.Enumarations.Product.CategoryType.Test, "All Exercises for Semester 1 of I Learn Smart Start 3 Book", ContentType.Review, 0, UploadType.Pdf, 5, 0.846, "Test_Semester_1_Hinh_1_iy0rst", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909883/edusource/Test_Semester_1_Hinh_1_iy0rst.png", "I-Learn-Smart-Start-3-Semester-1-Test", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909875/edusource/I-Learn-Smart-Start-3-Semester-1-Test.pdf", ILearnSmartStart3Id, staffId),
+                //I Learn Smart Start 3 - Semester 2 - Tests
+                Product.CreateProductForSeedData(listProduct[5], "Semester 2", 30000, Contract.Enumarations.Product.CategoryType.Test, "All Exercises for Semester 2 of I Learn Smart Start 3 Book", ContentType.Review, 0, UploadType.Pdf, 5, 1.037, "Test_Semester_2_hinh_1_wkt5rr", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910758/edusource/Test_Semester_2_hinh_1_wkt5rr.png", "I-Learn-Smart-Start-3-Semester-2-Test", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910727/edusource/I-Learn-Smart-Start-3-Semester-2-Test.pdf", ILearnSmartStart3Id, staffId)
+                ////I Learn Smart Start 3 - Unit 1 - Slides
+                //Product.CreateProductForSeedData(listProduct[6], "Unit 1: Getting Started", 30000, Contract.Enumarations.Product.CategoryType.Slide, "All Slides for Unit 1: Getting Started of I Learn Smart Start 3 Book", ContentType.Unit, 1, UploadType.Zip, 45, , "Screenshot_2025-03-02_170058_aqicxi", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912147/edusource/Screenshot_2025-03-02_170058_aqicxi.png", "I-Learn-Smart-Start-3-Semester-2-Test", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910727/edusource/I-Learn-Smart-Start-3-Semester-2-Test.pdf", ILearnSmartStart3Id, staffId)
                 );
 
 
@@ -128,7 +134,23 @@ public static class SeedData
                 //I Learn Smart Start 3 - Unit 5 - Tests
                 ImageOfProduct.CreateImageOfProductForSeedData("476898424_516722711033057_8916288325621536975_n_fvn3ly", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071632/edusource/476898424_516722711033057_8916288325621536975_n_fvn3ly.png", listProduct[3]),
                 ImageOfProduct.CreateImageOfProductForSeedData("476890688_9313465715439518_2551059009486639375_n_exkptm", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071639/edusource/476890688_9313465715439518_2551059009486639375_n_exkptm.png", listProduct[3]),
-                ImageOfProduct.CreateImageOfProductForSeedData("480004236_1422923598918877_8401951042523901775_n_iiba0p", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071649/edusource/480004236_1422923598918877_8401951042523901775_n_iiba0p.png", listProduct[3])
+                ImageOfProduct.CreateImageOfProductForSeedData("480004236_1422923598918877_8401951042523901775_n_iiba0p", "https://res.cloudinary.com/dc4eascme/image/upload/v1740071649/edusource/480004236_1422923598918877_8401951042523901775_n_iiba0p.png", listProduct[3]),
+                //I Learn Smart Start 3 - Semester 1 - Tests
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_Semester_1_Hinh_1_iy0rst", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909883/edusource/Test_Semester_1_Hinh_1_iy0rst.png", listProduct[4]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_Semester_1_Hinh_2_c7efky", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909888/edusource/Test_Semester_1_Hinh_2_c7efky.png", listProduct[4]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_Semester_1_Hinh_3_dbx3ab", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909892/edusource/Test_Semester_1_Hinh_3_dbx3ab.png", listProduct[4]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_Semester_1_Hinh_4_jbzsii", "https://res.cloudinary.com/dc4eascme/image/upload/v1740909897/edusource/Test_Semester_1_Hinh_4_jbzsii.png", listProduct[4]),
+                //I Learn Smart Start 3 - Semester 2 - Tests
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_Semester_2_hinh_1_wkt5rr", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910758/edusource/Test_Semester_2_hinh_1_wkt5rr.png", listProduct[5]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_semester_2_hinh_2_ex6rpy", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910763/edusource/Test_semester_2_hinh_2_ex6rpy.png", listProduct[5]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_semester_2_hinh_3_xpivqm", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910767/edusource/Test_semester_2_hinh_3_xpivqm.png", listProduct[5]),
+                ImageOfProduct.CreateImageOfProductForSeedData("Test_semester_2_hinh_4_lnr8ws", "https://res.cloudinary.com/dc4eascme/image/upload/v1740910771/edusource/Test_semester_2_hinh_4_lnr8ws.png", listProduct[5])
+                ////I Learn Smart Start 3 - Unit 1 - Slides
+                //ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-03-02_170058_aqicxi", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912147/edusource/Screenshot_2025-03-02_170058_aqicxi.png", listProduct[6]),
+                //ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-03-02_170122_eq2hcv", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912165/edusource/Screenshot_2025-03-02_170122_eq2hcv.png", listProduct[6]),
+                //ImageOfProduct.CreateImageOfProductForSeedData("481685944_4130001593898732_4891749656689355320_n_jpa0uk", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912173/edusource/481685944_4130001593898732_4891749656689355320_n_jpa0uk.png", listProduct[6]),
+                //ImageOfProduct.CreateImageOfProductForSeedData("Screenshot_2025-03-02_170231_jbssae", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912179/edusource/Screenshot_2025-03-02_170231_jbssae.png", listProduct[6]),
+                //ImageOfProduct.CreateImageOfProductForSeedData("482091473_526843163318795_2806003810738211573_n_xea0p4", "https://res.cloudinary.com/dc4eascme/image/upload/v1740912188/edusource/482091473_526843163318795_2806003810738211573_n_xea0p4.png", listProduct[6])
                 );
 
         }
