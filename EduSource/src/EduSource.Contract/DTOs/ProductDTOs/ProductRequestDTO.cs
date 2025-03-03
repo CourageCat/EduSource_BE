@@ -57,6 +57,7 @@ namespace EduSource.Contract.DTOs.ProductDTOs
             public double Size { get; set; }
             public IFormFile MainImage { get; set; }
             public IFormFile File { get; set; }
+            public IFormFile FileDemo { get; set; }
             public List<IFormFile> OtherImages { get; set; }
             public Guid BookId { get; set; }
         }

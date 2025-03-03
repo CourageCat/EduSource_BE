@@ -33,7 +33,8 @@ public sealed class GetAllProductsByUserQueryHandler : IQueryHandler<Query.GetAl
             {
                 isPurchased = listOrdersByUser.Any(order => order.Id == product.OrderDetails.ToList()[0].OrderId);
             }
-            listProductsMapped.Add(new ProductResponse(product.Id, product.Name, product.Price, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, product.FileUrl, product.Rating, product.IsPublic, product.IsApproved, null, null, isPurchased));
+            var fileUrl = isPurchased ? product.FileUrl : product.FileDemoUrl;
+            listProductsMapped.Add(new ProductResponse(product.Id, product.Name, product.Price, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, fileUrl, product.Rating, product.IsPublic, product.IsApproved, null, null, isPurchased));
         });
         //Mapping Category to CategoryResponse
         var result = new PagedResult<ProductResponse>(listProductsMapped, listProducts.PageIndex, listProducts.PageSize, listProducts.TotalCount, listProducts.TotalPages);

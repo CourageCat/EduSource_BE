@@ -88,7 +88,7 @@ public class ProductController : ApiController
     public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequestDTO productRequestDTO)
     {
         var userId = Guid.Parse(User.FindFirstValue("UserId"));
-        var result = await Sender.Send(new Command.CreateProductCommand(productRequestDTO.Name, productRequestDTO.Price, productRequestDTO.Category, productRequestDTO.Description, productRequestDTO.ContentType, productRequestDTO.Unit, productRequestDTO.UploadType, productRequestDTO.TotalPage, productRequestDTO.Size, productRequestDTO.MainImage, productRequestDTO.File, productRequestDTO.OtherImages, productRequestDTO.BookId, userId));
+        var result = await Sender.Send(new Command.CreateProductCommand(productRequestDTO.Name, productRequestDTO.Price, productRequestDTO.Category, productRequestDTO.Description, productRequestDTO.ContentType, productRequestDTO.Unit, productRequestDTO.UploadType, productRequestDTO.TotalPage, productRequestDTO.Size, productRequestDTO.MainImage, productRequestDTO.File, productRequestDTO.FileDemo, productRequestDTO.OtherImages, productRequestDTO.BookId, userId));
         if (result.IsFailure)
             return HandlerFailure(result);
 

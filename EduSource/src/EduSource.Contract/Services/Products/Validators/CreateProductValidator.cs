@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using EduSource.Contract.Enumarations.Product;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 
@@ -8,7 +9,7 @@ public class CreateProductValidator : AbstractValidator<Command.CreateProductCom
 {
     private readonly List<string> _allowedImageExtensions = new() { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
     private readonly List<string> _allowedFileExtensions = new() { ".pdf", ".ppt", ".pptx", ".zip", ".zar" };
-    public CreateProductValidator() 
+    public CreateProductValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Product name is required.");
@@ -26,8 +27,8 @@ public class CreateProductValidator : AbstractValidator<Command.CreateProductCom
             .NotNull().WithMessage("Content Type is required.");
 
         RuleFor(x => x.Unit)
-            .GreaterThan(0).WithMessage("Unit must be greater than zero.");
-
+            .GreaterThan(0).WithMessage("Unit must be greater than zero.")
+            .When(x => x.ContentType == ContentType.Unit);
         RuleFor(x => x.UploadType)
             .NotNull().WithMessage("Upload Type is required.");
 
@@ -49,6 +50,10 @@ public class CreateProductValidator : AbstractValidator<Command.CreateProductCom
         RuleFor(x => x.File)
             .NotNull().WithMessage("File is required.")
             .Must(BeAValidFile).WithMessage("File must be in PDF, PP, ZIP, or ZAR format.");
+
+        RuleFor(x => x.FileDemo)
+            .NotNull().WithMessage("FileDemo is required.")
+            .Must(BeAValidFile).WithMessage("FileDemo must be in PDF, PP, ZIP, or ZAR format.");
 
         RuleFor(x => x.BookId)
             .NotEmpty().WithMessage("Book ID is required.");

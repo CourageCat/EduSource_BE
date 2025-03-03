@@ -47,7 +47,7 @@ public class ProductRepository : IProductRepository
             var productData = new Dictionary<Guid, Product>();
 
             await connection.QueryAsync<Product, ImageOfProduct, Book, Product>(
-                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
+                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.FileDemoUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
                 iop.ImageUrl, iop.ImageId, iop.CreatedDate AS ImageCreatedDate,
                 b.Id, b.Name, b.ImageUrl, b.GradeLevel, b.Category
                 FROM Products p
@@ -88,7 +88,7 @@ public class ProductRepository : IProductRepository
             var productData = new Dictionary<Guid, Product>();
 
             await connection.QueryAsync<Product, ImageOfProduct, OrderDetails, Order, Book, Product>(
-                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
+                @"SELECT p.Id, p.Name, p.Price, p.Category, p.Description, p.ContentType, p.Unit, p.UploadType, p.TotalPage, p.Size, p.ImageUrl, p.FileUrl, p.FileDemoUrl, p.Rating, p.IsPublic, p.IsApproved, p.CreatedDate, p.ModifiedDate AS ProductModifiedDate,  
                 iop.ImageUrl, iop.ImageId, iop.CreatedDate AS ImageCreatedDate,
                 od.Id, od.CreatedDate AS OrderDetailsCreatedDate,
                 o.Id, o.AccountId, o.CreatedDate AS OrderCreatedDate,
@@ -140,7 +140,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "Id", "Name", "Price", "Category", "Unit", "ContentType", "UploadType", "TotalPage", "Size", "ImageUrl", "FileUrl", "Rating", "IsPublic", "IsApproved" };
+            var validColumns = new HashSet<string> { "Id", "Name", "Price", "Category", "Unit", "ContentType", "UploadType", "TotalPage", "Size", "ImageUrl", "FileUrl", "FileDemoUrl", "Rating", "IsPublic", "IsApproved" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
@@ -292,7 +292,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved", "p.CreatedDate", "p.ModifiedDate AS ProductModifiedDate", "od.Id", "od.ProductId", "od.OrderId" };
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.FileDemoUrl", "p.Rating", "p.IsPublic", "p.IsApproved", "p.CreatedDate", "p.ModifiedDate AS ProductModifiedDate", "od.Id", "od.ProductId", "od.OrderId" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
@@ -457,7 +457,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.FileDemoUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
@@ -590,7 +590,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.FileDemoUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
 
             // If no selected columns, select all
             var selectedColumnsString = string.Join(", ", validColumns); ;
@@ -616,7 +616,7 @@ public class ProductRepository : IProductRepository
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
+            var validColumns = new HashSet<string> { "p.Id", "p.Name", "Price", "p.Category", "p.Unit", "p.ContentType", "p.UploadType", "p.TotalPage", "p.Size", "p.ImageUrl", "p.FileUrl", "p.FileDemoUrl", "p.Rating", "p.IsPublic", "p.IsApproved" };
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all

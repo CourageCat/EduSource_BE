@@ -24,6 +24,8 @@ public class Product : DomainEntity<Guid>
     public string ImageUrl { get; private set; }
     public string FileId { get; private set; }
     public string FileUrl { get; private set; }
+    public string FileDemoId { get; private set; }
+    public string FileDemoUrl { get; private set; }
     public double Rating { get; private set; }
     public bool IsPublic { get; private set; }
     public bool IsApproved { get; private set; }
@@ -38,7 +40,7 @@ public class Product : DomainEntity<Guid>
     public virtual ICollection<ImageOfProduct> ImageOfProducts { get; private set; }
     public virtual ICollection<Feedback> Feedbacks { get; private set; }
 
-    public static Product CreateProductForSeedData(Guid id, string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    public static Product CreateProductForSeedData(Guid id, string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string imageId, string imageUrl, string fileId, string fileUrl, string fileDemoId, string fileDemoUrl, Guid bookId, Guid accountId)
     {
         if (contentType == ContentType.Unit)
         {
@@ -58,6 +60,8 @@ public class Product : DomainEntity<Guid>
                 ImageUrl = imageUrl,
                 FileId = fileId,
                 FileUrl = fileUrl,
+                FileDemoId = fileDemoId,
+                FileDemoUrl = fileDemoUrl,
                 Rating = 0,
                 IsPublic = true,
                 IsApproved = true,
@@ -83,6 +87,8 @@ public class Product : DomainEntity<Guid>
             ImageUrl = imageUrl,
             FileId = fileId,
             FileUrl = fileUrl,
+            FileDemoId = fileDemoId,
+            FileDemoUrl = fileDemoUrl,
             Rating = 0,
             IsPublic = true,
             IsApproved = true,
@@ -109,7 +115,7 @@ public class Product : DomainEntity<Guid>
         OrderDetails = orderDetails;
     }
 
-    public static Product CreateProduct(string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, Guid bookId, Guid accountId)
+    public static Product CreateProduct(string name, int price, CategoryType category, string description, ContentType contentType, int unit, UploadType uploadType, int totalPage, double size, string mainImageId, string mainImageUrl, string fileId, string fileUrl, string fileDemoId, string fileDemoUrl, Guid bookId, Guid accountId)
     {
         return new Product()
         {
@@ -126,6 +132,8 @@ public class Product : DomainEntity<Guid>
             ImageUrl = mainImageUrl,
             FileId = fileId,
             FileUrl = fileUrl,
+            FileDemoId = fileDemoId,
+            FileDemoUrl = fileDemoUrl,
             Rating = 0,
             IsPublic = true,
             IsApproved = true,

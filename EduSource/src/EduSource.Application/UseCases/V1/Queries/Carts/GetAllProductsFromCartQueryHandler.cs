@@ -24,7 +24,7 @@ public sealed class GetAllProductFromCartQueryHandler : IQueryHandler<Query.GetA
         var listProductsInCartMapped = new List<ProductResponse>();
         listProductsInCart.Items.ForEach(product =>
         {
-            listProductsInCartMapped.Add(new ProductResponse(product.Id, product.Name, product.Price, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, product.FileUrl, product.Rating, product.IsPublic, product.IsApproved, null, null, false));
+            listProductsInCartMapped.Add(new ProductResponse(product.Id, product.Name, product.Price, product.Category, product.Unit, product.Description, product.ContentType, product.UploadType, product.TotalPage, product.Size, product.ImageUrl, product.FileDemoUrl, product.Rating, product.IsPublic, product.IsApproved, null, null, false));
         });
         //Mapping Category to CategoryResponse
         var result = new PagedResult<ProductResponse>(listProductsInCartMapped, listProductsInCart.PageIndex, listProductsInCart.PageSize, listProductsInCart.TotalCount, listProductsInCart.TotalPages);

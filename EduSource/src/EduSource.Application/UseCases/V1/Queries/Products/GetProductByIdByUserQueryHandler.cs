@@ -29,7 +29,8 @@ public sealed class GetProductByIdByUserQueryHandler : IQueryHandler<Query.GetPr
         //Check if Product has been purchased by User or not
         var isProductPurchased = await _dpUnitOfWork.ProductRepositories.IsProductPurchasedByUserAsync(request.Id, request.AccountId);
         var listImageOfProducts = isProductPurchased ? productFound.ImageOfProducts.ToList().Select(i => i.ImageUrl).ToList() : productFound.ImageOfProducts.ToList().Select(i => i.ImageUrl).ToList().Take(3).ToList();
-        var result = new ProductResponse(productFound.Id, productFound.Name, productFound.Price, productFound.Category, productFound.Unit, productFound.Description, productFound.ContentType, productFound.UploadType, productFound.TotalPage, productFound.Size, productFound.ImageUrl, productFound.FileUrl, productFound.Rating, productFound.IsPublic, productFound.IsApproved, listImageOfProducts, new BookResponse()
+        var fileUrl = isProductPurchased ? productFound.FileUrl : productFound.FileDemoUrl;
+        var result = new ProductResponse(productFound.Id, productFound.Name, productFound.Price, productFound.Category, productFound.Unit, productFound.Description, productFound.ContentType, productFound.UploadType, productFound.TotalPage, productFound.Size, productFound.ImageUrl, fileUrl, productFound.Rating, productFound.IsPublic, productFound.IsApproved, listImageOfProducts, new BookResponse()
         {
             Name = productFound.Book.Name,
             Category = productFound.Book.Category,
