@@ -585,7 +585,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task<IEnumerable<Product>> GetProductsInCartToCheckoutAsync(Guid accountId)
+    public async Task<IEnumerable<Product>> GetProductsInCartByListIdsAsync(Guid accountId, List<Guid> productIds)
     {
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
@@ -599,11 +599,13 @@ public class ProductRepository : IProductRepository
             var queryBuilder = new StringBuilder(
                 $@"SELECT {selectedColumnsString} FROM Products p 
                 JOIN Carts c ON p.Id = c.ProductId
-                WHERE 1=1 AND p.IsDeleted = 0 AND c.AccountId = @AccountId");
+                WHERE 1=1 AND p.IsDeleted = 0 AND c.AccountId = @AccountId AND p.Id IN @ProductIds");
 
             var parameters = new DynamicParameters();
 
             parameters.Add("AccountId", $"{accountId}");
+            parameters.Add("ProductIds", productIds);
+
 
             var items = (await connection.QueryAsync<Product>(queryBuilder.ToString(), parameters)).ToList();
 
@@ -748,7 +750,6 @@ public class ProductRepository : IProductRepository
 
     public async Task<bool> IsProductPurchasedByUserAsync(Guid productId, Guid accountId)
     {
-
         var sql = "SELECT CASE WHEN EXISTS (SELECT 1 FROM Products p JOIN OrderDetails od ON p.Id = od.ProductId JOIN Orders o ON o.Id = od.OrderId WHERE p.Id = @Id AND o.AccountId = @AccountId) THEN 1 ELSE 0 END";
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {

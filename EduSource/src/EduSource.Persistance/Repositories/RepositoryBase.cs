@@ -86,7 +86,7 @@ public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDi
 
     public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includeProperties)
     {
-        return await FindAll(null, includeProperties).AsTracking().ToListAsync();
+        return await FindAll(predicate, includeProperties).AsTracking().ToListAsync();
     }
 }
 

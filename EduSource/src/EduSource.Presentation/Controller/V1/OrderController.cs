@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using EduSource.Contract.Abstractions.Shared;
+using EduSource.Contract.DTOs.OrderDTOs;
 using EduSource.Contract.Services.Orders;
 using EduSource.Presentation.Abstractions;
 using MediatR;
@@ -24,10 +25,10 @@ public class OrderController : ApiController
     [HttpPost("create_order", Name = "CreateOrder")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
-    public async Task<IActionResult> CreateOrder()
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderBankingDTO orderRequest)
     {
         var userId = Guid.Parse(User.FindFirstValue("UserId"));
-        var result = await Sender.Send(new Command.CreateOrderBankingCommand(userId));
+        var result = await Sender.Send(new Command.CreateOrderBankingCommand(userId, orderRequest.ProductIds, orderRequest.IsFromCart));
         if (result.IsFailure)
             return HandlerFailure(result);
 

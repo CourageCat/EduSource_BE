@@ -20,9 +20,9 @@ public static class CartException
         }
     }
 
-    public sealed class CheckoutWithNoProductsInCartException : NotFoundException
+    public sealed class ProductNotInCartException : NotFoundException
     {
-        public CheckoutWithNoProductsInCartException() : base(MessagesList.CartCheckoutWithNoProductsInCartException.GetMessage().Message, MessagesList.CartCheckoutWithNoProductsInCartException.GetMessage().Code)
+        public ProductNotInCartException() : base(MessagesList.CartProductNotInCartException.GetMessage().Message, MessagesList.CartProductNotInCartException.GetMessage().Code)
         {
 
         }

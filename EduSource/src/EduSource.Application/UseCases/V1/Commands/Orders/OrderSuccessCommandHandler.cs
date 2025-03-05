@@ -40,50 +40,99 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
 
 
         // Find User
-        var account = await _efUnitOfWork.AccountRepository.FindByIdAsync(orderObject.AccountId) ?? throw new AccountException.AccountNotFoundException();
-
-        // Find Products in User's Cart
-        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckoutAsync(orderObject.AccountId);
-        if (productsInCart.ToList().Count == 0)
+        var accountFound = await _efUnitOfWork.AccountRepository.FindByIdAsync(orderObject.AccountId) ?? throw new AccountException.AccountNotFoundException();
+        if (!orderObject.IsFromCart)
         {
-            throw new CartException.CheckoutWithNoProductsInCartException();
-        }
-        // Calculate the sum of order
-        var sumOfOrder = productsInCart.Sum(p => p.Price);
-        // Create Order
-        var orderId = Guid.NewGuid();
-        var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.Description, orderObject.AccountId);
-        _efUnitOfWork.OrderRepository.Add(orderCreated);
-        // Create OrderDetails for Product of order
-        var listOrderDetails = new List<OrderDetails>();
-        productsInCart.ToList().ForEach(p =>
-        {
-            listOrderDetails.Add(OrderDetails.CreateOrderDetailsWithProduct(1, orderId, p.Id));
-        });
-        _efUnitOfWork.OrderDetailsRepository.AddRange(listOrderDetails);
-        // Delete Products in Cart
-        var cartItems = await _efUnitOfWork.CartRepository.FindAllAsync(x => x.AccountId == orderObject.AccountId);
-        _efUnitOfWork.CartRepository.RemoveMultiple(cartItems.ToList());
-        await _efUnitOfWork.SaveChangesAsync(cancellationToken);
-        // Delete cache order
-        await _responseCacheService.DeleteCacheResponseAsync($"order_{request.OrderId}");
-        // Create List InvoiceItems for email
-        var invoiceItems = new List<EmailOrderDTO>();
-        productsInCart.ToList().ForEach(p =>
-        {
-            invoiceItems.Add(new EmailOrderDTO()
+            var productCheckout = await _efUnitOfWork.ProductRepository.FindByIdAsync(orderObject.ProductIds[0]) ?? throw new ProductException.ProductNotFoundException();
+            // Create payment dto
+            List<ItemDTO> itemDTOs = new()
             {
-                Description = p.Name,
-                Price = p.Price,
-                Quantity = 1,
-                Total = p.Price
+                new ItemDTO(productCheckout.Name, 1, productCheckout.Price)
+            };
+            // Calculate the sum of order
+            var sumOfOrder = productCheckout.Price;
+            // Create Order
+            var orderId = Guid.NewGuid();
+            var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.Description, orderObject.AccountId);
+            _efUnitOfWork.OrderRepository.Add(orderCreated);
+            // Create OrderDetails for Product of order
+            var orderDetail = OrderDetails.CreateOrderDetailsWithProduct(1, orderCreated.Id, productCheckout.Id);                  
+            _efUnitOfWork.OrderDetailsRepository.Add(orderDetail);
+            // Check Product in Cart or not, if in Cart then remove
+            var productInCart = await _efUnitOfWork.CartRepository.FindSingleAsync(x => x.ProductId == productCheckout.Id);
+            if (productInCart != null) _efUnitOfWork.CartRepository.Remove(productInCart);
+            await _efUnitOfWork.SaveChangesAsync(cancellationToken);
+            // Delete cache order
+            await _responseCacheService.DeleteCacheResponseAsync($"order_{request.OrderId}");
+            // Create List InvoiceItems for email
+            var invoiceItems = new List<EmailOrderDTO>()
+            {
+                new EmailOrderDTO()
+                {
+                    Description = productCheckout.Description,
+                    Price = productCheckout.Price,
+                    Quantity = 1,
+                    Total = productCheckout.Price,
+                }
+            };
+            // Send success order email and invoice for User
+            await Task.WhenAll(
+               _publisher.Publish(new DomainEvent.NotiUserOrderSuccess(orderCreated.Id, accountFound.Email, orderObject.OrderCode.ToString(), DateTime.UtcNow.ToString(), invoiceItems, sumOfOrder), cancellationToken)
+            );
+            var result = new Response.OrderSuccess($"{_clientSetting.Url}{_clientSetting.OrderSuccess}");
+            return Result.Success(new Success<Response.OrderSuccess>("", "", result));
+        }
+        else
+        {
+            var productsCheckout = await _dpUnitOfWork.ProductRepositories.GetProductsInCartByListIdsAsync(orderObject.AccountId, orderObject.ProductIds);
+            //Check if productCheckout match product in cart
+            orderObject.ProductIds.ForEach(id =>
+            {
+                if (!productsCheckout.Any(x => x.Id == id))
+                {
+                    throw new CartException.ProductNotInCartException();
+                }
             });
-        });
-        // Send success order email and invoice for User
-        await Task.WhenAll(
-           _publisher.Publish(new DomainEvent.NotiUserOrderSuccess(orderCreated.Id, account.Email, orderObject.OrderCode.ToString(), DateTime.UtcNow.ToString(), invoiceItems, sumOfOrder), cancellationToken)
-        );
-        var result = new Response.OrderSuccess($"{_clientSetting.Url}{_clientSetting.OrderSuccess}");
-        return Result.Success(new Success<Response.OrderSuccess>("", "", result));
+            // Calculate the sum of order
+            var sumOfOrder = productsCheckout.Sum(p => p.Price);
+            // Create Order
+            var orderId = Guid.NewGuid();
+            var orderCreated = Order.CreateOrder(orderId, sumOfOrder, orderObject.OrderCode, orderObject.Description, orderObject.AccountId);
+            _efUnitOfWork.OrderRepository.Add(orderCreated);
+            // Create OrderDetails for Product of order
+            var listOrderDetails = new List<OrderDetails>();
+            productsCheckout.ToList().ForEach(p =>
+            {
+                listOrderDetails.Add(OrderDetails.CreateOrderDetailsWithProduct(1, orderId, p.Id));
+            });
+            _efUnitOfWork.OrderDetailsRepository.AddRange(listOrderDetails);
+            // Delete Products in Cart
+            var listProductIds = productsCheckout.Select(x => x.Id).ToList();
+            var cartItems = await _efUnitOfWork.CartRepository.FindAllAsync(
+                x => x.AccountId == orderObject.AccountId && x.ProductId.HasValue && listProductIds.Contains(x.ProductId.Value)
+            );
+            _efUnitOfWork.CartRepository.RemoveMultiple(cartItems.ToList());
+            await _efUnitOfWork.SaveChangesAsync(cancellationToken);
+            // Delete cache order
+            await _responseCacheService.DeleteCacheResponseAsync($"order_{request.OrderId}");
+            // Create List InvoiceItems for email
+            var invoiceItems = new List<EmailOrderDTO>();
+            productsCheckout.ToList().ForEach(p =>
+            {
+                invoiceItems.Add(new EmailOrderDTO()
+                {
+                    Description = p.Name,
+                    Price = p.Price,
+                    Quantity = 1,
+                    Total = p.Price
+                });
+            });
+            // Send success order email and invoice for User
+            await Task.WhenAll(
+               _publisher.Publish(new DomainEvent.NotiUserOrderSuccess(orderCreated.Id, accountFound.Email, orderObject.OrderCode.ToString(), DateTime.UtcNow.ToString(), invoiceItems, sumOfOrder), cancellationToken)
+            );
+            var result = new Response.OrderSuccess($"{_clientSetting.Url}{_clientSetting.OrderSuccess}");
+            return Result.Success(new Success<Response.OrderSuccess>("", "", result));
+        }       
     }
 }

@@ -29,28 +29,51 @@ public sealed class CreateOrderBankingCommandHandler : ICommandHandler<Command.C
 
     public async Task<Result> Handle(Command.CreateOrderBankingCommand request, CancellationToken cancellationToken)
     {
-        //CreateOrderBankingCommandHandler
-        var accountFound = await _efUnitOfWork.AccountRepository.FindByIdAsync(request.AccountId) ?? throw new AccountException.AccountNotFoundException();
-        var productsInCart = await _dpUnitOfWork.ProductRepositories.GetProductsInCartToCheckoutAsync(request.AccountId);
-        if (productsInCart.ToList().Count == 0)
-        {
-            throw new CartException.CheckoutWithNoProductsInCartException();
-        }
-
         long orderId = new Random().Next(1, 100000);
-
-        // Create payment dto
-        List<ItemDTO> itemDTOs = new();
-        productsInCart.ToList().ForEach(product =>
+        //CreateOrderBankingCommandHandler
+        //Check account existed
+        var accountFound = await _efUnitOfWork.AccountRepository.FindByIdAsync(request.AccountId) ?? throw new AccountException.AccountNotFoundException();
+        if (!request.IsFromCart)
         {
-            itemDTOs.Add(new ItemDTO(product.Name, 1, product.Price));
-        });
-        var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
-        var result = await _paymentService.CreatePaymentLink(createPaymentDto);
-        var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId, result.Description);
-        // Save memory to when success or fail will know value
-        await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
-        
-        return Result.Success(new Success<CreatePaymentResponseDTO>("", "", result));
+            var productCheckout = await _efUnitOfWork.ProductRepository.FindByIdAsync(request.ProductIds[0]) ?? throw new ProductException.ProductNotFoundException();
+            // Create payment dto
+            List<ItemDTO> itemDTOs = new()
+            {
+                new ItemDTO(productCheckout.Name, 1, productCheckout.Price)
+            };
+            var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
+            var result = await _paymentService.CreatePaymentLink(createPaymentDto);
+            var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
+            // Save memory to when success or fail will know value
+            await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
+
+            return Result.Success(new Success<CreatePaymentResponseDTO>("", "", result));
+        }
+        else
+        {
+            var productsCheckout = await _dpUnitOfWork.ProductRepositories.GetProductsInCartByListIdsAsync(request.AccountId, request.ProductIds);
+            //Check if productCheckout match product in cart
+            request.ProductIds.ForEach(id =>
+            {
+                if (!productsCheckout.Any(x => x.Id == id))
+                {
+                    throw new CartException.ProductNotInCartException();
+                }
+            });
+            // Create payment dto
+            List<ItemDTO> itemDTOs = new();
+            productsCheckout.ToList().ForEach(product =>
+            {
+                itemDTOs.Add(new ItemDTO(product.Name, 1, product.Price));
+            });
+            var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
+            var result = await _paymentService.CreatePaymentLink(createPaymentDto);
+            var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
+            // Save memory to when success or fail will know value
+            await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
+
+            return Result.Success(new Success<CreatePaymentResponseDTO>("", "", result));
+        }
+        throw new Exception();
     }
 }
