@@ -25,11 +25,11 @@ jobs:
 
       # Xác minh lại đường dẫn đến solution file và build solution
       - name: Build with dotnet
-        run: dotnet build src/EduSource.API/EduSource.API.sln --configuration Release
+        run: dotnet build EduSource/EduSource.sln --configuration Release
 
       # Publish ứng dụng
       - name: dotnet publish
-        run: dotnet publish src/EduSource.API./EduSource.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish EduSource/EduSource.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
