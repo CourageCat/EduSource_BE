@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build src/EduSource.API/EduSource.API.sln --configuration Release
+        run: dotnet build EduSource/src/EduSource.API/EduSource.API.sln --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
