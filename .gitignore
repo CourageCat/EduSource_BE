@@ -366,3 +366,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /src/EduSource.API/appsettings.Development.json
+/EduSource/src/EduSource.API/appsettings.json
+/EduSource/src/EduSource.API/appsettings.Development.json
