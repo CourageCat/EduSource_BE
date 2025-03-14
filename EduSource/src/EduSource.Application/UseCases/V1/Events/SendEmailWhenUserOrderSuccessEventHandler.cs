@@ -32,7 +32,7 @@ public sealed class SendEmailWhenUserOrderSuccessEventHandler
         }
         await _emailService.SendMailAsync
                     (notification.Email,
-                    "Change email",
+                    "Invoice",
                     "EmailOrderSuccess.html", new Dictionary<string, string> {
             {"ToEmail", notification.Email},
                         {"InvoiceNumber", notification.InvoiceNumber },
