@@ -54,6 +54,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IProductInComboRepository, ProductInComboRepository>()
             .AddTransient<IProductRepository, ProductRepository>()
             .AddTransient<IWishlistRepository, WishlistRepository>()
-            .AddTransient<IBookRepository, BookRepository>();
+            .AddTransient<IBookRepository, BookRepository>()
+            .AddTransient<IProductRequestRepository, ProductRequestRepository>();
     }
 }

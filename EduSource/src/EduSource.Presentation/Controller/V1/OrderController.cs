@@ -58,8 +58,47 @@ public class OrderController : ApiController
 
         return Redirect(result.Value.Data.Url);
     }
-    [Authorize(Policy = "AdminPolicy")]
 
+    [Authorize]
+    [HttpPost("create_order_request", Name = "CreateOrderRequest")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]
+    public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestBankingDTO orderRequest)
+    {
+        var userId = Guid.Parse(User.FindFirstValue("UserId"));
+        var result = await Sender.Send(new Command.CreateOrderRequestBankingCommand(userId, orderRequest.ProductRequestId, orderRequest.Name, orderRequest.Price));
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("order_request_success", Name = "OrderRequestSuccess")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> OrderRequestSuccess([FromQuery] long orderId)
+    {
+        var result = await Sender.Send(new Command.OrderRequestSuccessCommand(orderId));
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Redirect(result.Value.Data.Url);
+    }
+
+    [HttpGet("order_request_fail", Name = "OrderRequestFail")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> OrderRequestFail([FromQuery] long orderId)
+    {
+        var result = await Sender.Send(new Command.OrderRequestFailCommand(orderId));
+        if (result.IsFailure)
+            return HandlerFailure(result);
+
+        return Redirect(result.Value.Data.Url);
+    }
+
+
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet("get_all_orders", Name = "GetAllOrders")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<Success>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Result<Error>))]

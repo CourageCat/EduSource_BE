@@ -36,7 +36,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         // Get infomation saved in memory
         var orderMemory = await _responseCacheService.GetCacheResponseAsync($"order_{request.OrderId}");
         // Conver JSON to object
-        var orderObject = JsonConvert.DeserializeObject<ResultCacheDTO>(orderMemory);
+        var orderObject = JsonConvert.DeserializeObject<ResultCacheDTO.ProductPaymentCacheDTO>(orderMemory);
 
 
         // Find User
@@ -44,11 +44,6 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
         if (!orderObject.IsFromCart)
         {
             var productCheckout = await _efUnitOfWork.ProductRepository.FindByIdAsync(orderObject.ProductIds[0]) ?? throw new ProductException.ProductNotFoundException();
-            // Create payment dto
-            List<ItemDTO> itemDTOs = new()
-            {
-                new ItemDTO(productCheckout.Name, 1, productCheckout.Price)
-            };
             // Calculate the sum of order
             var sumOfOrder = productCheckout.Price;
             // Create Order

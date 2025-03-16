@@ -137,6 +137,7 @@ public class Account : DomainEntity<Guid>
     public virtual ICollection<Combo> Combos { get; private set; }
     public virtual ICollection<Wishlist> Wishlists { get; private set; }
     public virtual ICollection<Product> Products { get; private set; }
+    public virtual ICollection<ProductRequest> ProductRequests { get; private set; }
 
 
 

@@ -10,7 +10,17 @@ public sealed class ApplicationDbContext : DbContext
     { }
 
     protected override void OnModelCreating(ModelBuilder builder)
-        => builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+    {
+        builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+
+        // Configure ProductRequest.Id to not be an identity column
+        builder.Entity<ProductRequest>()
+            .Property(p => p.Id)
+            .ValueGeneratedNever(); // Prevents Identity column behavior
+
+        base.OnModelCreating(builder);
+    }
+
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -24,6 +34,7 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<ProductInCombo> ProductInCombos { get; set; }
     public DbSet<Cart> Carts { get; set; }
+    public DbSet<ProductRequest> ProductRequests { get; set; }
 
 
 }

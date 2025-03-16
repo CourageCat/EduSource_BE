@@ -43,7 +43,7 @@ public sealed class CreateOrderBankingCommandHandler : ICommandHandler<Command.C
             };
             var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
             var result = await _paymentService.CreatePaymentLink(createPaymentDto);
-            var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
+            var resultForCache = new ResultCacheDTO.ProductPaymentCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
             // Save memory to when success or fail will know value
             await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
 
@@ -68,7 +68,7 @@ public sealed class CreateOrderBankingCommandHandler : ICommandHandler<Command.C
             });
             var createPaymentDto = new CreatePaymentDTO(orderId, $"Cart Checkout", itemDTOs, _payOSSetting.ErrorUrl, _payOSSetting.SuccessUrl + $"?orderId={orderId}");
             var result = await _paymentService.CreatePaymentLink(createPaymentDto);
-            var resultForCache = new ResultCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
+            var resultForCache = new ResultCacheDTO.ProductPaymentCacheDTO(result.OrderCode, request.AccountId, result.Description, request.ProductIds, request.IsFromCart);
             // Save memory to when success or fail will know value
             await _responseCacheService.SetCacheResponseAsync($"order_{orderId}", resultForCache, TimeSpan.FromMinutes(60));
 

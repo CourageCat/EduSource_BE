@@ -16,6 +16,8 @@ public class OrderDetails : DomainEntity<Guid>
     public virtual Combo Combo { get; private set; }
     public Guid? ProductId { get; private set; }
     public virtual Product? Product { get; private set; }
+    public int? ProductRequestId { get; private set; }
+    public virtual ProductRequest ProductRequest { get; private set; }
 
     public static OrderDetails CreateOrderDetailsWithProduct(int quantity, Guid orderId, Guid productId)
     {
@@ -28,6 +30,17 @@ public class OrderDetails : DomainEntity<Guid>
         };
     }
 
+    public static OrderDetails CreateOrderDetailsWithProductRequest(int quantity, Guid orderId, int productRequestId)
+    {
+        return new OrderDetails()
+        {
+            Quantity = quantity,
+            OrderId = orderId,
+            ProductRequestId = productRequestId,
+            IsDeleted = false
+        };
+    }
+
     public void UpdateOrder(Order order)
     {
         Order = order;
@@ -36,5 +49,10 @@ public class OrderDetails : DomainEntity<Guid>
     public void UpdateProduct(Product product)
     {
         Product = product;
+    }
+
+    public void UpdateProductRequest(ProductRequest productRequest)
+    {
+        ProductRequest = productRequest;
     }
 }

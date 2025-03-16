@@ -27,7 +27,10 @@ public sealed class GetAllOrdersQueryHandler : IQueryHandler<Query.GetAllOrdersQ
             listOrderDetailsMapped.Add(listTemp);
             order.OrderDetails.ToList().ForEach(detail =>
             {
-                listTemp.Add(new OrderDetailsResponseDTO(detail.Id, detail.Product.Name, detail.Product.Price, detail.Quantity));
+                var name = detail.Product != null ? detail.Product.Name : detail.ProductRequest.Name;
+                var price = detail.Product != null ? detail.Product.Price : detail.ProductRequest.Price;
+
+                listTemp.Add(new OrderDetailsResponseDTO(detail.Id, name, price, detail.Quantity));
             });
         });
         for (int i = 0; i < listOrders.Items.Count; i++)

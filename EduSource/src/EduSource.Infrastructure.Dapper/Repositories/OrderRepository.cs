@@ -52,8 +52,9 @@ public class OrderRepository : IOrderRepository
     {
         using (var connection = new SqlConnection(_configuration.GetConnectionString("ConnectionStrings")))
         {
+            //Product
             // Valid columns for selecting
-            var validColumns = new HashSet<string> { "o.Id", "o.TotalPrice", "o.OrderCode", "o.Description", "o.CreatedDate", "o.ModifiedDate AS OrderModifiedDate", "a.Id", "a.FirstName", "a.LastName", "a.Email", "a.CropAvatarUrl", "a.GenderType", "a.CreatedDate AS AccountCreatedDate", "od.Id", "od.Quantity", "od.CreatedDate AS OrderDetailsCreatedDate", "p.Id", "p.Name", "p.Price" };
+            var validColumns = new HashSet<string> { "o.Id", "o.TotalPrice", "o.OrderCode", "o.Description", "o.CreatedDate", "o.ModifiedDate AS OrderModifiedDate", "a.Id", "a.FirstName", "a.LastName", "a.Email", "a.CropAvatarUrl", "a.GenderType", "a.CreatedDate AS AccountCreatedDate", "od.Id", "od.Quantity", "od.CreatedDate AS OrderDetailsCreatedDate", "p.Id", "p.Name", "p.Price"};
             var columns = selectedColumns?.Where(c => validColumns.Contains(c)).ToArray();
 
             // If no selected columns, select all
@@ -64,7 +65,7 @@ public class OrderRepository : IOrderRepository
                 $@"SELECT {selectedColumnsString} FROM Orders o 
                 JOIN Accounts a ON a.Id = o.AccountId
                 JOIN OrderDetails od ON o.Id = od.OrderId
-                JOIN Products p ON p.Id = od.ProductId                
+                JOIN Products p ON p.Id = od.ProductId          
                 WHERE 1=1 AND p.IsDeleted = 0");
 
             var parameters = new DynamicParameters();
@@ -82,7 +83,7 @@ public class OrderRepository : IOrderRepository
             //Filter by MinValue and MaxValue
             if (filterParams?.MinValue.HasValue == true && filterParams?.MaxValue.HasValue == true)
             {
-                queryBuilder.Append(" AND Price >= @MinValue AND Price <= MaxValue");
+                queryBuilder.Append(" AND o.TotalPrice >= @MinValue AND o.TotalPrice <= MaxValue");
                 parameters.Add("MinValue", $"{filterParams.MinValue}");
                 parameters.Add("MaxValue", $"{filterParams.MaxValue}");
             }
@@ -116,6 +117,71 @@ public class OrderRepository : IOrderRepository
                 },
                 parameters,
                 splitOn: "OrderModifiedDate, AccountCreatedDate, OrderDetailsCreatedDate");
+
+            //ProductRequest
+            // Valid columns for selecting
+            var validColumnsRequest = new HashSet<string> { "o.Id", "o.TotalPrice", "o.OrderCode", "o.Description", "o.CreatedDate", "o.ModifiedDate AS OrderModifiedDate", "a.Id", "a.FirstName", "a.LastName", "a.Email", "a.CropAvatarUrl", "a.GenderType", "a.CreatedDate AS AccountCreatedDate", "od.Id", "od.Quantity", "od.CreatedDate AS OrderDetailsCreatedDate", "pr.Id", "pr.Name", "pr.Price" };
+            var columnsRequest = selectedColumns?.Where(c => validColumnsRequest.Contains(c)).ToArray();
+
+            // If no selected columns, select all
+            var selectedColumnsStringRequest = columnsRequest?.Length > 0 ? string.Join(", ", columnsRequest) : string.Join(", ", validColumnsRequest); ;
+
+            // Start building the query
+            var queryBuilderRequest = new StringBuilder(
+                $@"SELECT {selectedColumnsStringRequest} FROM Orders o 
+                JOIN Accounts a ON a.Id = o.AccountId
+                JOIN OrderDetails od ON o.Id = od.OrderId
+                JOIN ProductRequests pr ON pr.Id = od.ProductRequestId          
+                WHERE 1=1 AND pr.IsDeleted = 0");
+
+            var parametersRequest = new DynamicParameters();
+
+            pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+            pageSize = pageSize <= 0 ? 10 : pageSize > 100 ? 100 : pageSize;
+
+            // Filter by Description
+            if (!string.IsNullOrEmpty(filterParams?.Description))
+            {
+                queryBuilderRequest.Append(" AND Description LIKE @Description");
+                parametersRequest.Add("Description", $"%{filterParams.Description}%");
+            }
+
+            //Filter by MinValue and MaxValue
+            if (filterParams?.MinValue.HasValue == true && filterParams?.MaxValue.HasValue == true)
+            {
+                queryBuilderRequest.Append(" AND o.TotalPrice >= @MinValue AND o.TotalPrice <= MaxValue");
+                parametersRequest.Add("MinValue", $"{filterParams.MinValue}");
+                parametersRequest.Add("MaxValue", $"{filterParams.MaxValue}");
+            }
+
+            // Query products and their orders
+            await connection.QueryAsync<Order, Account, OrderDetails, ProductRequest, Order>(
+                queryBuilderRequest.ToString(),
+                (order, account, orderDetails, productRequest) =>
+                {
+                    if (!orderData.TryGetValue(order.Id, out var existingOrder))
+                    {
+                        // If this order is not yet added, create it
+                        existingOrder = order;
+                        existingOrder.UpdateOrderDetails(new List<OrderDetails>());
+                        orderData.Add(existingOrder.Id, existingOrder);
+                    }
+                    existingOrder.UpdateAccount(account);
+                    // Add orderDetails to the order object
+                    if (orderDetails != null && !existingOrder.OrderDetails.Any(od => od.Id == orderDetails.Id))
+                    {
+                        orderDetails.UpdateProductRequest(productRequest);
+                        //if (product.Id == orderDetails.ProductId)
+                        //{
+                        existingOrder.OrderDetails.Add(orderDetails);
+                        //}
+
+                    }
+                    return existingOrder;
+                },
+                parameters,
+                splitOn: "OrderModifiedDate, AccountCreatedDate, OrderDetailsCreatedDate");
+
             //Result
             var result = orderData.Values.ToList();
             // Count TotalCount, TotalPages and calculate offset
