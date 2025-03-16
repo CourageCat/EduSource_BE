@@ -8,8 +8,7 @@ public class ClientSetting
     public string VerifyChangeEmail { get; set; }
     public string OrderSuccess { get; set; }
     public string OrderFail { get; set; }
-    public string OrderRequestSuccess { get; set; }
-    public string OrderRequestFail { get; set; }
+    public string OrderRequest { get; set; }
     public string VerifyChangePassword { get; set; }
 }
 

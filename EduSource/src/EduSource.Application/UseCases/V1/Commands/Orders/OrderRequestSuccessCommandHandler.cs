@@ -56,9 +56,7 @@ public sealed class OrderRequestSuccessCommandHandler : ICommandHandler<Command.
         await _efUnitOfWork.SaveChangesAsync(cancellationToken);
         // Delete cache order
         await _responseCacheService.DeleteCacheResponseAsync($"order_{request.OrderId}");
-        var result = new Response.OrderRequestSuccess($"{_clientSetting.Url}{_clientSetting.OrderRequestSuccess}/success");
+        var result = new Response.OrderRequestSuccess($"{_clientSetting.Url}{_clientSetting.OrderRequest}/{orderObject.ProductRequestId}?is_success=1");
         return Result.Success(new Success<Response.OrderRequestSuccess>("", "", result));
-
-
     }
 }
