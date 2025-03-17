@@ -54,7 +54,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
             var orderDetail = OrderDetails.CreateOrderDetailsWithProduct(1, orderCreated.Id, productCheckout.Id);                  
             _efUnitOfWork.OrderDetailsRepository.Add(orderDetail);
             // Check Product in Cart or not, if in Cart then remove
-            var productInCart = await _efUnitOfWork.CartRepository.FindSingleAsync(x => x.ProductId == productCheckout.Id);
+            var productInCart = await _efUnitOfWork.CartRepository.FindSingleAsync(x => x.ProductId == productCheckout.Id && x.AccountId == orderObject.AccountId);
             if (productInCart != null) _efUnitOfWork.CartRepository.Remove(productInCart);
             await _efUnitOfWork.SaveChangesAsync(cancellationToken);
             // Delete cache order
