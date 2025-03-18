@@ -190,7 +190,7 @@ public class OrderRepository : IOrderRepository
             var offset = (pageIndex - 1) * pageSize;
 
             // Apply sorting
-            if (filterParams.SortType == SortType.PaidDate)
+            if (filterParams.SortType == SortType.TotalAmount)
             {
                 result = filterParams.IsSortASC == null
                     ? result.OrderByDescending(o => o.TotalPrice).Reverse().ToList()
@@ -203,8 +203,8 @@ public class OrderRepository : IOrderRepository
                 result = filterParams.IsSortASC == null
                     ? result.OrderByDescending(o => o.CreatedDate).Reverse().ToList()
                     : filterParams.IsSortASC == true
-                        ? result.OrderByDescending(o => o.TotalPrice).Reverse().ToList()
-                        : result.OrderByDescending(o => o.TotalPrice).ToList();
+                        ? result.OrderByDescending(o => o.CreatedDate).Reverse().ToList()
+                        : result.OrderByDescending(o => o.CreatedDate).ToList();
             }
             else
             {
