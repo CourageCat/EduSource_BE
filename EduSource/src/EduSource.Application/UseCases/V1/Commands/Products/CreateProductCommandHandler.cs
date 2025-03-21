@@ -42,7 +42,7 @@ public sealed class CreateProductCommandHandler : ICommandHandler<Command.Create
         //Upload Demo File and get Url
         var uploadFileDemo = await _mediaService.UploadImageAsync(request.FileDemo.FileName, request.FileDemo);
 
-        var productCreated = Product.CreateProduct(request.Name, request.Price, request.Category, request.Description, request.ContentType, request.Unit, request.UploadType, request.TotalPage, request.Size, uploadMainImage.PublicImageId, uploadMainImage.ImageUrl, uploadFile.PublicImageId, uploadFile.ImageUrl, uploadFileDemo.PublicImageId, uploadFileDemo.ImageUrl, request.BookId, request.AccountId);
+        var productCreated = Product.CreateProduct(request.Name, request.Price, request.Category, request.Description, request.ContentType, request.Unit.Value, request.UploadType, request.TotalPage, request.Size, uploadMainImage.PublicImageId, uploadMainImage.ImageUrl, uploadFile.PublicImageId, uploadFile.ImageUrl, uploadFileDemo.PublicImageId, uploadFileDemo.ImageUrl, request.BookId, request.AccountId);
         _efUnitOfWork.ProductRepository.Add(productCreated);
         //Upload Other Image and get Url
         var uploadOtherImages = await _mediaService.UploadImagesAsync(request.OtherImages);
