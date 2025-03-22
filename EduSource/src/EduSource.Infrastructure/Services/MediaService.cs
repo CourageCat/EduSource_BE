@@ -49,11 +49,12 @@ public class MediaService : IMediaService
         }
         else
         {
+            var safeFileName = $"{fileBaseName.Replace(" ", "-")}{fileExtension}"; // Replace spaces with hyphens
             var uploadParams = new RawUploadParams
             {
                 File = new FileDescription(fileName, fileImage.OpenReadStream()),
                 Folder = _cloudinarySetting.Folder,
-                PublicId = fileName
+                PublicId = safeFileName
             };
             uploadResult = await _cloudinary.UploadAsync(uploadParams);
         }
