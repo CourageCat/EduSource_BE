@@ -61,7 +61,7 @@ public class MediaService : IMediaService
         if (uploadResult?.StatusCode != System.Net.HttpStatusCode.OK) return null;
 
         // Construct the correct download URL with the file extension
-        var fileUrl = $"{uploadResult.Url.AbsoluteUri}?fl_attachment={fileBaseName}{fileExtension}";
+        var fileUrl = $"{uploadResult.Url.AbsoluteUri}";
 
         return new ImageDTO
         {
