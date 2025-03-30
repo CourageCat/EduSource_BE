@@ -26,7 +26,9 @@ public sealed class GetProductByIdQueryHandler : IQueryHandler<Query.GetProductB
         {
             throw new ProductException.ProductNotFoundException();
         }
-        var result = new ProductResponse(productFound.Id, productFound.Name, productFound.Price, productFound.Category, productFound.Unit, productFound.Description, productFound.ContentType, productFound.UploadType, productFound.TotalPage, productFound.Size, productFound.ImageUrl, productFound.FileDemoUrl, productFound.Rating, productFound.IsPublic, productFound.IsApproved, productFound.ImageOfProducts.ToList().Select(x => x.ImageUrl).ToList().Take(3).ToList(), new BookResponse()
+        var numberOfImagesOfProduct = productFound.ImageOfProducts.Count;
+        var imagesOfProduct = numberOfImagesOfProduct > 3 ? productFound.ImageOfProducts.ToList().Select(x => x.ImageUrl).ToList().Take(3).ToList() : productFound.ImageOfProducts.ToList().Select(x => x.ImageUrl).ToList().Take(numberOfImagesOfProduct - 1).ToList();
+        var result = new ProductResponse(productFound.Id, productFound.Name, productFound.Price, productFound.Category, productFound.Unit, productFound.Description, productFound.ContentType, productFound.UploadType, productFound.TotalPage, productFound.Size, productFound.ImageUrl, productFound.FileDemoUrl, productFound.Rating, productFound.IsPublic, productFound.IsApproved, imagesOfProduct, new BookResponse()
         {
             Name = productFound.Book.Name,
             Category = productFound.Book.Category,
