@@ -49,11 +49,12 @@ public class MediaService : IMediaService
         }
         else
         {
+            var safeFileName = $"{fileBaseName.Replace(" ", "-")}{fileExtension}"; // Replace spaces with hyphens
             var uploadParams = new RawUploadParams
             {
                 File = new FileDescription(fileName, fileImage.OpenReadStream()),
                 Folder = _cloudinarySetting.Folder,
-                PublicId = fileName
+                PublicId = safeFileName
             };
             uploadResult = await _cloudinary.UploadAsync(uploadParams);
         }
@@ -61,7 +62,7 @@ public class MediaService : IMediaService
         if (uploadResult?.StatusCode != System.Net.HttpStatusCode.OK) return null;
 
         // Construct the correct download URL with the file extension
-        var fileUrl = $"{uploadResult.Url.AbsoluteUri}?fl_attachment={fileBaseName}{fileExtension}";
+        var fileUrl = $"{uploadResult.SecureUri.AbsoluteUri}";
 
         return new ImageDTO
         {
