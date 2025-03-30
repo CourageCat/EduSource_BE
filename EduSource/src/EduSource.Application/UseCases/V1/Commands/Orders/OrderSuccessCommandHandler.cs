@@ -116,7 +116,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
             {
                 invoiceItems.Add(new EmailOrderDTO()
                 {
-                    Description = p.Name,
+                    Name = p.Name,
                     Price = p.Price,
                     Quantity = 1,
                     Total = p.Price

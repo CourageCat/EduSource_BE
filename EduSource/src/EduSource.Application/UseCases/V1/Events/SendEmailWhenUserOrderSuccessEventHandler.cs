@@ -28,7 +28,7 @@ public sealed class SendEmailWhenUserOrderSuccessEventHandler
         {
             invoiceItemsHtml.AppendFormat(
                 "<tr><td>{0}</td><td>{1}</td><td>{2} VND</td><td>{3} VND</td></tr>",
-                item.Description, item.Quantity, item.Price, item.Quantity * item.Price);
+                item.Name, item.Quantity, item.Price, item.Quantity * item.Price);
         }
         await _emailService.SendMailAsync
                     (notification.Email,
