@@ -64,7 +64,7 @@ public sealed class OrderSuccessCommandHandler : ICommandHandler<Command.OrderSu
             {
                 new EmailOrderDTO()
                 {
-                    Description = productCheckout.Description,
+                    Name = productCheckout.Name,
                     Price = productCheckout.Price,
                     Quantity = 1,
                     Total = productCheckout.Price,
